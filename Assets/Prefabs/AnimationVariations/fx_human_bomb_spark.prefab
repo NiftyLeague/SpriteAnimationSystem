@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4532296607952258512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5972053583707071129}
+  - component: {fileID: 5016992550258024450}
+  m_Layer: 0
+  m_Name: fx_human_bomb_spark
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5972053583707071129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4532296607952258512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5016992550258024450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4532296607952258512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 0
+  variationName: fx_human_bomb_spark
+  characterType: 6
+  accessoryInfo:
+    name: 
+    displayName: 
+    layerName: 
+    accessoryType: 0
+    characterType: 0
+    layer: 0
+  animationLayer: {fileID: 8094616047016392781, guid: 0ea675cc13edf65479aecbf7abd22093,
+    type: 3}
+  colorVariations: []
+  palleteColors:
+  - index: 11
+    swapIndex: 231
+    color:
+      serializedVersion: 2
+      rgba: 4284606462
+    name: Primrose Path
+  colors:
+  - serializedVersion: 2
+    rgba: 4284606462
+  originalColors: []
+  layerDataAddress: fx_human_bomb_spark
+  layerData: {fileID: 0}

@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7250241492603142089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4911417644028351116}
+  - component: {fileID: 6606293061924683266}
+  m_Layer: 0
+  m_Name: a_share_crab-claws
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4911417644028351116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250241492603142089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6606293061924683266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250241492603142089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 830
+  variationName: a_share_crab-claws
+  characterType: 0
+  accessoryInfo:
+    name: ShareCrabClaws
+    displayName: crab claws
+    layerName: a_share_crab-claws
+    accessoryType: 7
+    characterType: 0
+    layer: 54
+  animationLayer: {fileID: 138513220654009795, guid: ad3fcdf2f9c5863469d3c18a6eecb583,
+    type: 3}
+  colorVariations:
+  - from:
+    - index: 8
+      swapIndex: 59
+      color:
+        serializedVersion: 2
+        rgba: 4282661860
+      name: Vermilion Cinnabar
+    to:
+    - serializedVersion: 2
+      rgba: 4282661860
+  - from:
+    - index: 8
+      swapIndex: 59
+      color:
+        serializedVersion: 2
+        rgba: 4282661860
+      name: Vermilion Cinnabar
+    to:
+    - serializedVersion: 2
+      rgba: 4284606462
+  - from:
+    - index: 8
+      swapIndex: 59
+      color:
+        serializedVersion: 2
+        rgba: 4282661860
+      name: Vermilion Cinnabar
+    to:
+    - serializedVersion: 2
+      rgba: 4294305836
+  - from:
+    - index: 8
+      swapIndex: 59
+      color:
+        serializedVersion: 2
+        rgba: 4282661860
+      name: Vermilion Cinnabar
+    to:
+    - serializedVersion: 2
+      rgba: 4294915691
+  palleteColors:
+  - index: 25
+    swapIndex: 20
+    color:
+      serializedVersion: 2
+      rgba: 4280620056
+    name: River Styx
+  - index: 8
+    swapIndex: 59
+    color:
+      serializedVersion: 2
+      rgba: 4282661860
+    name: Vermilion Cinnabar
+  colors:
+  - serializedVersion: 2
+    rgba: 4280620056
+  - serializedVersion: 2
+    rgba: 4282661860
+  originalColors:
+  - index: 8
+    swapIndex: 59
+    color:
+      serializedVersion: 2
+      rgba: 4282661860
+    name: Vermilion Cinnabar
+  layerDataAddress: a_share_crab-claws
+  layerData: {fileID: 11400000, guid: 0a21b716d976f7446b4369803d7b1cd8, type: 2}

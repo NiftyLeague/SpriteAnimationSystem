@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8722848128176716252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3474571934944282994}
+  - component: {fileID: 2251391682425745260}
+  m_Layer: 0
+  m_Name: b_doge_tail_behind
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3474571934944282994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722848128176716252}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2251391682425745260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722848128176716252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 0
+  variationName: b_doge_tail_behind
+  characterType: 4
+  accessoryInfo:
+    name: 
+    displayName: 
+    layerName: 
+    accessoryType: 0
+    characterType: 0
+    layer: 0
+  animationLayer: {fileID: 1595626637514870985, guid: b7e88c8a71559a84c8f8493d44975548,
+    type: 3}
+  colorVariations: []
+  palleteColors:
+  - index: 25
+    swapIndex: 20
+    color:
+      serializedVersion: 2
+      rgba: 4280620056
+    name: River Styx
+  - index: 10
+    swapIndex: 174
+    color:
+      serializedVersion: 2
+      rgba: 4281642750
+    name: Ripe Pumpkin
+  colors:
+  - serializedVersion: 2
+    rgba: 4280620056
+  - serializedVersion: 2
+    rgba: 4281642750
+  originalColors: []
+  layerDataAddress: b_doge_tail_behind
+  layerData: {fileID: 11400000, guid: a78a6b5c815be52419cab0d3925f143d, type: 2}

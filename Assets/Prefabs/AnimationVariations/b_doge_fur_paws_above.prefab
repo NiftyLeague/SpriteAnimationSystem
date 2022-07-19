@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6894267824042113181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3754965031144373085}
+  - component: {fileID: 3181750619397023709}
+  m_Layer: 0
+  m_Name: b_doge_fur_paws_above
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3754965031144373085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6894267824042113181}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3181750619397023709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6894267824042113181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 0
+  variationName: b_doge_fur_paws_above
+  characterType: 4
+  accessoryInfo:
+    name: 
+    displayName: 
+    layerName: 
+    accessoryType: 0
+    characterType: 0
+    layer: 0
+  animationLayer: {fileID: 8875071739421473065, guid: 5c0ea144db17cbe41b98137c52229fbb,
+    type: 3}
+  colorVariations: []
+  palleteColors:
+  - index: 19
+    swapIndex: 254
+    color:
+      serializedVersion: 2
+      rgba: 4294901502
+    name: White
+  colors:
+  - serializedVersion: 2
+    rgba: 4294901502
+  originalColors: []
+  layerDataAddress: b_doge_fur_paws_above
+  layerData: {fileID: 11400000, guid: 5252d580791aa214da0fd52fffa042ad, type: 2}

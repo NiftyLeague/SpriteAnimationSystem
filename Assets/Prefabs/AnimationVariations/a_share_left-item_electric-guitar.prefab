@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3847079289569330497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2156272899688314740}
+  - component: {fileID: 712284604567517090}
+  m_Layer: 0
+  m_Name: a_share_left-item_electric-guitar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2156272899688314740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3847079289569330497}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &712284604567517090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3847079289569330497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 911
+  variationName: a_share_left-item_electric-guitar
+  characterType: 0
+  accessoryInfo:
+    name: ShareLeftItemElectricGuitar
+    displayName: left item electric guitar
+    layerName: a_share_left-item_electric-guitar
+    accessoryType: 9
+    characterType: 0
+    layer: 11
+  animationLayer: {fileID: 5398223068604744379, guid: 746d8cc26268d644a96364441e0c301e,
+    type: 3}
+  colorVariations:
+  - from:
+    - index: 26
+      swapIndex: 0
+      color:
+        serializedVersion: 2
+        rgba: 4282646783
+      name: Cherry Soda
+    - index: 24
+      swapIndex: 43
+      color:
+        serializedVersion: 2
+        rgba: 4282657574
+      name: Latin Charm
+    to:
+    - serializedVersion: 2
+      rgba: 4282646783
+    - serializedVersion: 2
+      rgba: 4282657574
+  - from:
+    - index: 26
+      swapIndex: 0
+      color:
+        serializedVersion: 2
+        rgba: 4282646783
+      name: Cherry Soda
+    - index: 24
+      swapIndex: 43
+      color:
+        serializedVersion: 2
+        rgba: 4282657574
+      name: Latin Charm
+    to:
+    - serializedVersion: 2
+      rgba: 4284892218
+    - serializedVersion: 2
+      rgba: 4282657574
+  - from:
+    - index: 26
+      swapIndex: 0
+      color:
+        serializedVersion: 2
+        rgba: 4282646783
+      name: Cherry Soda
+    - index: 24
+      swapIndex: 43
+      color:
+        serializedVersion: 2
+        rgba: 4282657574
+      name: Latin Charm
+    to:
+    - serializedVersion: 2
+      rgba: 4292581632
+    - serializedVersion: 2
+      rgba: 4282657574
+  - from:
+    - index: 26
+      swapIndex: 0
+      color:
+        serializedVersion: 2
+        rgba: 4282646783
+      name: Cherry Soda
+    - index: 24
+      swapIndex: 43
+      color:
+        serializedVersion: 2
+        rgba: 4282657574
+      name: Latin Charm
+    to:
+    - serializedVersion: 2
+      rgba: 4294915691
+    - serializedVersion: 2
+      rgba: 4282657574
+  palleteColors: []
+  colors: []
+  originalColors:
+  - index: 26
+    swapIndex: 0
+    color:
+      serializedVersion: 2
+      rgba: 4282646783
+    name: Cherry Soda
+  - index: 24
+    swapIndex: 43
+    color:
+      serializedVersion: 2
+      rgba: 4282657574
+    name: Latin Charm
+  layerDataAddress: a_share_left-item_electric-guitar
+  layerData: {fileID: 0}

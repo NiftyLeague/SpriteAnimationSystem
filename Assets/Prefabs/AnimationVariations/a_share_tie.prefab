@@ -1,0 +1,217 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9025011891449219174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2667794230698239036}
+  - component: {fileID: 6440485158876742290}
+  m_Layer: 0
+  m_Name: a_share_tie
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2667794230698239036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025011891449219174}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6440485158876742290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025011891449219174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b8a55406cc2dc458f9fc2e559cb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitId: 870
+  variationName: a_share_tie
+  characterType: 0
+  accessoryInfo:
+    name: ShareTie
+    displayName: tie
+    layerName: a_share_tie
+    accessoryType: 11
+    characterType: 0
+    layer: 56
+  animationLayer: {fileID: 6631599430993430791, guid: c8f4a808bd95d6647b58faf95bb8fac4,
+    type: 3}
+  colorVariations:
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4280620056
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4281411390
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4281542306
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4285282408
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4282539046
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4293155572
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4294915691
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4281642750
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4294901502
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4287129946
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4282657574
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4292581632
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4289385706
+  - from:
+    - index: 25
+      swapIndex: 20
+      color:
+        serializedVersion: 2
+        rgba: 4280620056
+      name: River Styx
+    to:
+    - serializedVersion: 2
+      rgba: 4283287395
+  palleteColors:
+  - index: 25
+    swapIndex: 20
+    color:
+      serializedVersion: 2
+      rgba: 4280620056
+    name: River Styx
+  colors:
+  - serializedVersion: 2
+    rgba: 4280620056
+  originalColors:
+  - index: 25
+    swapIndex: 20
+    color:
+      serializedVersion: 2
+      rgba: 4280620056
+    name: River Styx
+  layerDataAddress: a_share_tie
+  layerData: {fileID: 11400000, guid: 343e3fb6994a9ef4a8e5fb46c490b135, type: 2}
