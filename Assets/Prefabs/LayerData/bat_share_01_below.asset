@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: bat_share_01_below
   frames:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 9aa06f567364c4e13bba99b38eda3106, type: 3}
+  - {fileID: 21300000, guid: 1be465e350f714b61b106bb5ecd50aff, type: 3}
+  - {fileID: 21300000, guid: 5755a3fe719194cab81cc70582a8043e, type: 3}
+  - {fileID: 21300000, guid: fb302c5b6608040f89d2c3acb56d8a51, type: 3}
+  - {fileID: 21300000, guid: 086ec18e77adf48aeaa70dd6d7ab9a2d, type: 3}
+  - {fileID: 21300000, guid: f573dd27fa2a34012854065f93892640, type: 3}
+  - {fileID: 21300000, guid: 3f36afd21641e4cdbb1113a0699b7586, type: 3}
+  - {fileID: 21300000, guid: 7690b5f2e7fa649b0b01382529d2d987, type: 3}
+  - {fileID: 21300000, guid: d41fa88c199874e2ba7fd60dbebad3ae, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7f5f182e81f157a40b3559777bf2d8fa, type: 3}
   - {fileID: 21300000, guid: 210db22bb2c925f47badb76b2fb10222, type: 3}
   - {fileID: 21300000, guid: a875b6e718a4c5341bc5c0303e85e446, type: 3}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: e20162ea3d13b4990aaf9d908fa78226, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

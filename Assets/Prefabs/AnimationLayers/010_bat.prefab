@@ -50,3 +50,6 @@ MonoBehaviour:
   customizationCategory: 0
   variations:
   - {fileID: 4786258628655573599, guid: 1033633ff7f919b4ea26168da7704123, type: 3}
+  - {fileID: 4786258628655573599, guid: df6c9271509434f89950c3d40c85ccca, type: 3}
+  - {fileID: 4786258628655573599, guid: 4df2d3236dfc2456c84fe4c60f43703b, type: 3}
+  - {fileID: 4786258628655573599, guid: e71a8158f40e54bfea18ee89a49e2fc1, type: 3}

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8113897237278598923
 Transform:
   m_ObjectHideFlags: 0
@@ -92,4 +92,4 @@ MonoBehaviour:
     rgba: 4294901502
   originalColors: []
   layerDataAddress: bat_share_01_above
-  layerData: {fileID: 0}
+  layerData: {fileID: 11400000, guid: 86c5b28ade00caa4294ed1dc4561b073, type: 2}

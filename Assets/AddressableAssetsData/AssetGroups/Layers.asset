@@ -2345,6 +2345,50 @@ MonoBehaviour:
     m_Address: z_share_composite_00
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 06dea70f0326c401eb64fa0f294b58c1
+    m_Address: bat_share_bread_above
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9be6509dd3f64418baa4fb33cfcc0c20
+    m_Address: bat_share_bread_below
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1fbc20e5bcf384d1aa561f9cdad60dbf
+    m_Address: bat_share_diamond_above
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 57a2317a0801d49b083be7af133d39d6
+    m_Address: bat_share_diamond_below
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c376cb8c88b7d4071a0861adb00629dc
+    m_Address: bat_share_purple_above
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a340d112c67e14ef5962d9dbef72d5ac
+    m_Address: bat_share_purple_below
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 53de2d7d7bf974d2b99e94c66218fa8e
+    m_Address: cape_share_01_above
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: afa5b3a2eb78d406d9368c479fd75608
+    m_Address: cape_share_01_below
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: cc78201ffe3a4405b8336158aff252d0
+    m_Address: halo_share_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b30f7eb2682614b13bfc0b580ec8a5ec
+    m_Address: companion_share_bot_body
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e3825d6e7f7ec4defafdd54c35424958
+    m_Address: companion_share_bot_propeller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 892be5d2196fe12468dc7f7de4ada062, type: 2}
   m_SchemaSet:
