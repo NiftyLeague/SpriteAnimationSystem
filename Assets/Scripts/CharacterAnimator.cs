@@ -33,20 +33,15 @@ public class CharacterAnimator : MonoBehaviour
 
 	AttackDirection DetermineDirection(Vector2 dir)
 	{
-		if (dir.y == 1f && dir.x == 0f)
-		{
+		if (dir.y == 1f && dir.x == 0f) {
 			return AttackDirection.Up;
-		} else if (dir.y > 0.45f && Mathf.Abs(dir.x) > 0.45f)
-		{
+		} else if (dir.y > 0.45f && Mathf.Abs(dir.x) > 0.45f) {
 			return AttackDirection.DiagonalUp;
-		} else if (dir.y < -0.45f && Mathf.Abs(dir.x) > 0.45f)
-		{
+		} else if (dir.y < -0.45f && Mathf.Abs(dir.x) > 0.45f) {
 			return AttackDirection.DownForward;
-		} else if (dir.y == -1f)
-		{
+		} else if (dir.y == -1f) {
 			return AttackDirection.Down;
-		} else
-		{
+		} else {
 			return AttackDirection.Forward;
 		}
 	}
@@ -58,11 +53,20 @@ public class CharacterAnimator : MonoBehaviour
 	public Character character;
 	public Color primaryColor { get { return character.player.Color; } }
 
-	public SpriteRenderer rend; //# Was complete composite render. Used now as lower precomposite.
-	//#public SpriteRenderer rend2; //# weapon
-	//#public SpriteRenderer rend3; //# upper precomposite
-	private List<SpriteRenderer> rends = new List<SpriteRenderer>();
-	private GameObject rendsParent;
+	public SpriteRenderer rend; //# Was used for a single composite render.
+	//#public GameObject rend; //# Now used as a parent for several composite and individual layers.
+	public SpriteRenderer charLayer0;
+	public SpriteRenderer charLayer1;
+	public SpriteRenderer charLayer2;
+	public SpriteRenderer charLayer3;
+	public SpriteRenderer batLayer0;
+	public SpriteRenderer batLayer1;
+	public SpriteRenderer capeLayer0;
+	public SpriteRenderer capeLayer1;
+	public SpriteRenderer haloLayer0;
+	private List<SpriteRenderer> _rends;
+	public List<SpriteRenderer> rends { get { return _rends; } }
+	private GameObject _rendsParent;
 	private float zIncrement = 0.001f;
 
 	public LineRenderer tongueLine;
@@ -101,13 +105,9 @@ public class CharacterAnimator : MonoBehaviour
 	float lastLastDirectionChangeTime = 0f;
 	float idleTime = 0f;
 
-
 	float t
 	{
-		get
-		{
-			return character.t;
-		}
+		get { return character.t; }
 	}
 
 
@@ -125,12 +125,43 @@ public class CharacterAnimator : MonoBehaviour
 		SetRendColor(Color.white);
 	}
 
+	void Awake()
+	{
+		if (_rends != null) return;
+
+		_rends = new List<SpriteRenderer>() {
+			charLayer0,
+			batLayer0,
+			charLayer1,
+			capeLayer0,
+			batLayer1,
+			charLayer2,
+			capeLayer1,
+			charLayer3,
+			//haloLayer0
+		};
+		/*#
+		_rends = new List<SpriteRenderer>() {
+			charLayer0,
+			charLayer1,
+			charLayer2,
+			charLayer3,
+			batLayer0,
+			batLayer1,
+			capeLayer0,
+			capeLayer1,
+			//haloLayer0
+		};
+		#*/
+	}
+
 	void Start()
 	{
-		rendsParent = rend.gameObject; // TODO: re-reference rend as rendsParent where needed.
+		_rendsParent = rend.gameObject; // TODO: re-reference rend as _rendsParent where needed.
 		spriteDefaultOffset = rend.transform.localPosition;
 		//#rend.flipX = character.FacingDirection < 0;
 		SetRendFlipX();
+
 		spawnLoadEffect.SetActive(GetFrameAbsolute(0) == null);
 	}
 
@@ -151,10 +182,9 @@ public class CharacterAnimator : MonoBehaviour
 				SetRendPosition (spriteDefaultOffset);
 				//SetRendPositionScale (new Vector3(character.FacingDirection, 1f, 1f));
 				*@/
-				//# TODO: Consider transforming rendsParent instead.
+				//# TODO: Consider transforming _rendsParent instead.
 				var p = spriteDefaultOffset;
-				foreach (var rendr in rends)
-				{
+				foreach (var rendr in _rends) {
 					rendr.transform.localRotation = Quaternion.identity;
 					rendr.transform.localPosition = p;
 					p.z += zIncrement;
@@ -172,42 +202,38 @@ public class CharacterAnimator : MonoBehaviour
 
 		if (animState != newAnimState)
 		{
-			print($"CharacterAnimator.LateUpdate: animState: {animState}, newAnimState: {newAnimState}");
+			//##print($"CharacterAnimator.LateUpdate: animState: {animState}, newAnimState: {newAnimState}"); //##
 			frame = 0;
 			frameCounter = 0f;
 
-			if (animState == AnimState.Skidding)
-			{
+			if (animState == AnimState.Skidding) {
 				transitionTime = 0.05f;
 				SetFrame(AnimationTagType.SkidRecover);
-			} else if (newAnimState == AnimState.Jumping && animState == AnimState.WallSlide)
-			{
+			}
+			else if (newAnimState == AnimState.Jumping && animState == AnimState.WallSlide) {
 				transitionTime = 0.05f;
 				SetFrame(AnimationTagType.WallslideJump);
 			}
 			variationRandomizer = Random.Range(0, 10);
 
-			if (newAnimState != AnimState.Tongue)
-			{
+			if (newAnimState != AnimState.Tongue) {
 				tongueLine.enabled = false;
 				tongueTip.gameObject.SetActive(false);
 			}
 			if (newAnimState == AnimState.Idle && animState != AnimState.Idle)
-			{
 				idleTime = 0f;
-			}
 		}
 
 		animState = newAnimState;
 
 		if (transitionTime > 0f)
 		{
-			if (animState != AnimState.BouncedInAir)
-			{
+			if (animState != AnimState.BouncedInAir) {
 				transitionTime -= t;
 				return;
 			}
-			else transitionTime = 0f;
+			else
+				transitionTime = 0f;
 		}
 
 
@@ -259,36 +285,33 @@ public class CharacterAnimator : MonoBehaviour
 				break;
 		}
 
-		if (character.IngestedPowerup && character.state != CharacterState.Burping && (character.state != CharacterState.Special || character.tongueState != TongueState.HitPowerupBurping))
-		{
+		if (character.IngestedPowerup && character.state != CharacterState.Burping && (character.state != CharacterState.Special || character.tongueState != TongueState.HitPowerupBurping)) {
 			RunTrailSilhouettePoweredUp(Color.black);
-		} else if (character.JustSpawned)
-		{
+		}
+		else if (character.JustSpawned) {
 			RunTrailSilhouettePoweredUp(Color.clear);
-		} else if (trailCounter != 0)
-		{
+		}
+		else if (trailCounter != 0) {
 			//#rend.color = Color.white;
 			SetRendColor(Color.white);
 			trailCounter = 0;
-		} else if (rend.color != Color.white)
-		{
-			//#rend.color = Color.white;
-			SetRendColor(Color.white);
+		}
+		//#else if (rend.color != Color.white) {
+		else if (charLayer0.color != Color.white) {
+				//#rend.color = Color.white;
+				SetRendColor(Color.white);
 		}
 
-		if (character.state == CharacterState.Burping)
-		{
-			if (!wasBurp)
-			{
+		if (character.state == CharacterState.Burping) {
+			if (!wasBurp) {
 				frame = 0;
 				frameCounter = 0f;
 				wasBurp = true;
 			}
 
-			if (frameCounter < 0.4f)
-			{
+			if (frameCounter < 0.4f) {
 				RunAnimation(AnimationTagType.BurpStart, 0.08f, true);
-			}
+			} //# NOTE: Should there be an else here?
 			{
 				RunAnimation(AnimationTagType.BurpLoop, 0.1f);
 			}
@@ -300,28 +323,24 @@ public class CharacterAnimator : MonoBehaviour
 	private void UpdateSpawnEffect()
 	{
 		if (spawnLoadEffect.activeSelf && GetFrameAbsolute(0) != null)
-		{
 			spawnLoadEffect.SetActive(false);
-		} else if (!spawnLoadEffect.activeSelf && GetFrameAbsolute(0) == null)
-		{
+
+		else if (!spawnLoadEffect.activeSelf && GetFrameAbsolute(0) == null)
 			spawnLoadEffect.SetActive(true);
-		}
 	}
 
 	void AnimateRun()
 	{
 		if (frame > 8 && Time.time - lastDirectionChangeTime < 0.05f && lastDirectionChangeTime - lastLastDirectionChangeTime > 0.25f)
-		{
 			SetFrame(AnimationTagType.RunDirChange, 0);
-		} else if (frame > 8 && Time.time - lastDirectionChangeTime < 0.1f && lastDirectionChangeTime - lastLastDirectionChangeTime > 0.25f)
-		{
+		
+		else if (frame > 8 && Time.time - lastDirectionChangeTime < 0.1f && lastDirectionChangeTime - lastLastDirectionChangeTime > 0.25f)
 			SetFrame(AnimationTagType.RunDirChange, 1);
-		} else
-		{
+		
+		else {
 			int frameBefore = frame;
 			RunAnimation(AnimationTagType.Run, 0.03f);
-			if (frame != frameBefore && frame % 4 == 1)
-			{
+			if (frame != frameBefore && frame % 4 == 1) {
 				SoundController.PlaySoundEffect("Footstep", 0.1f, transform.position);
 				EffectsController.CreateDustPuff(transform.position, character.FacingDirection);
 			}
@@ -335,167 +354,198 @@ public class CharacterAnimator : MonoBehaviour
 		/*# if (GameController.HasInstance && GameController.State == GameState.RoundFinished && character.IsWinningPlayer())
 		{
 			if (frameCounter < 0.3f)
-			{
 				SetFrame(AnimationTagType.StandRight, 0);
-			} else if (frameCounter < 0.4f)
-			{
+			
+			else if (frameCounter < 0.4f)
 				SetFrame(AnimationTagType.WinTransition, 0);
-			} else if (frameCounter < 0.5f)
-			{
+			
+			else if (frameCounter < 0.5f)
 				SetFrame(AnimationTagType.WinTransition, 1);
-			} else
-			{
+			
+			else {
 				if (frameCounter % 2f < 0.9f)
-				{
 					SetFrame(AnimationTagType.Win, 2);
-				} else if (frameCounter % 2f < 1f)
-				{
+				
+				else if (frameCounter % 2f < 1f)
 					SetFrame(AnimationTagType.Win, 1);
-				} else if (frameCounter % 2f < 1.9f)
-				{
+				
+				else if (frameCounter % 2f < 1.9f)
 					SetFrame(AnimationTagType.Win, 0);
-				} else
-				{
+				
+				else
 					SetFrame(AnimationTagType.Win, 1);
-				}
 			}
-		} else #*/ if (!character.IsActive)
-		{
+		}
+		else #*/ if (!character.IsActive) {
 			SetFrame(character.state == CharacterState.Posing ? AnimationTagType.Accessories : AnimationTagType.StandRight, 0);
 			idleTime = 0f;
 			frameCounter = 0f;
-		} else
-		{
+		}
+		else {
 			switch (character.type)
 			{
 				case CharacterType.Alien:
 					if (idleTime < 3f)
-					{
 						RunAnimation(AnimationTagType.StandRight, 0.05f);
-					} else if (idleTime < 3.1f)
-					{
+					
+					else if (idleTime < 3.1f)
 						RunAnimation(AnimationTagType.AlienTeaStart, 0.1f);
-					} else if (idleTime % 10f < 6f)
-					{
+					
+					else if (idleTime % 10f < 6f)
 						RunAnimation(AnimationTagType.AlienTea, 0.25f);
-					} else if (idleTime % 10f < 7.5f)
-					{
+					
+					else if (idleTime % 10f < 7.5f)
 						RunAnimation(AnimationTagType.AlienTeaTurned, 0.25f);
-					} else if (idleTime % 10f < 9f)
-					{
+					
+					else if (idleTime % 10f < 9f)
 						RunAnimation(AnimationTagType.AlienTea, 0.25f);
-					} else
-					{
+					
+					else
 						RunAnimation(AnimationTagType.AlienTeaSip, 0.25f);
-					}
+					
 					break;
 				case CharacterType.Ape:
 					if (idleTime % 5f < 3f || idleTime > 10f)
-					{
 						RunAnimation(AnimationTagType.StandRight, 0.05f);
-					} else if (idleTime % 5f < 3.1f)
-					{
+					
+					else if (idleTime % 5f < 3.1f)
 						RunAnimation(AnimationTagType.ApeScratchHeadStart, 0.05f, true);
-					} else if (idleTime % 5f < 3.95f)
-					{
+					
+					else if (idleTime % 5f < 3.95f)
 						RunAnimation(AnimationTagType.ApeScratchHeadLookFwd, 0.25f);
-					} else if (idleTime % 5f < 4.9f)
-					{
+					
+					else if (idleTime % 5f < 4.9f)
 						RunAnimation(AnimationTagType.ApeScratchHeadLookSide, 0.25f);
-					} else
-					{
+					
+					else
 						RunAnimation(AnimationTagType.ApeScratchHeadStart, -0.05f, true);
-					}
+					
 					break;
 				case CharacterType.Cat:
-					if (character.pounceState == PounceState.Active)
-					{
+					if (character.pounceState == PounceState.Active) {
 						RunAnimation(AnimationTagType.CatIdleExcited, 0.2f);
 						break;
 					}
 					if (frameCounter < 1f)
-					{
 						SetFrame(AnimationTagType.StandRight, 0);
-					} else
-					{
+					
+					else {
 						if (frameCounter < 1.05f)
-						{
 							SetFrame(AnimationTagType.IdleTransition, 0);
-						} else
-						{
-							if (frameCounter < 12f)
-							{
+						
+						else {
+							if (frameCounter < 12f) {
 								if (frameCounter % 5f < 4.05f)
-								{
 									SetFrame(AnimationTagType.IdleLoop, 0);
-								} else if (frameCounter % 5f < 4.1f)
-								{
+								
+								else if (frameCounter % 5f < 4.1f)
 									SetFrame(AnimationTagType.IdleLoop, 1);
-								} else if (frameCounter % 5f < 4.95f)
-								{
+								
+								else if (frameCounter % 5f < 4.95f)
 									SetFrame(AnimationTagType.IdleLoop, 2);
-								} else
-								{
+								
+								else
 									SetFrame(AnimationTagType.IdleLoop, 3);
-								}
-							} else
-							{
-								SetFrame(AnimationTagType.IdleLoop, 1);
 							}
+							else
+								SetFrame(AnimationTagType.IdleLoop, 1);
 						}
 					}
 					break;
 				case CharacterType.Doge:
 					if (idleTime % 5f < 3f || idleTime > 10f)
-					{
 						RunAnimation(AnimationTagType.StandRight, 0.05f);
 
-					} else if (idleTime % 5f < 3.05f)
-					{
+					else if (idleTime % 5f < 3.05f)
 						RunAnimation(AnimationTagType.DogeSwoleTransition, 0.1f, true);
-					} else if (idleTime % 5f < 4.95f)
-					{
+					
+					else if (idleTime % 5f < 4.95f)
 						RunAnimation(AnimationTagType.DogeSwole, 0.15f);
-					} else
-					{
+					
+					else
 						RunAnimation(AnimationTagType.DogeSwoleTransition, -0.1f, true);
-					}
+					
 					break;
 				case CharacterType.Frog:
 					if (idleTime < 3f)
-					{
 						RunAnimation(AnimationTagType.StandRight, 0.05f);
-					} else if (idleTime < 3.05f)
-					{
+					
+					else if (idleTime < 3.05f)
 						RunAnimation(AnimationTagType.FrogSit, 0.1f, true);
-					} else if (idleTime % 6f < 5.6f)
-					{
+					
+					else if (idleTime % 6f < 5.6f)
 						SetFrame(AnimationTagType.FrogCroak, 0);
-					} else if (idleTime % 6f < 5.7f)
-					{
+					
+					else if (idleTime % 6f < 5.7f)
 						SetFrame(AnimationTagType.FrogCroak, 1);
-					} else if (idleTime % 6f < 5.9f)
-					{
+					
+					else if (idleTime % 6f < 5.9f)
 						SetFrame(AnimationTagType.FrogCroak, 2);
-					} else
-					{
+					
+					else
 						SetFrame(AnimationTagType.FrogCroak, 1);
-					}
+					
 					break;
 				case CharacterType.Human:
 					if (idleTime < 3f)
-					{
 						RunAnimation(AnimationTagType.StandRight, 0.05f);
-					} else if (idleTime < 3.05f)
-					{
+					
+					else if (idleTime < 3.05f)
 						RunAnimation(AnimationTagType.HumanSquatStart, 0.1f, true);
-					} else
-					{
+					
+					else
 						RunAnimation(AnimationTagType.HumanSquatLoop, 0.5f);
-					}
+					
 					break;
 			}
 		}
+	}
+
+	public void RunAttacksDemo() //#
+	{
+		StartCoroutine("RunAttacksDemoCoroutine");
+	}
+
+	public IEnumerable RunAttacksDemoCoroutine() //#
+	{
+		float delay0 = 0.4f, delay1 = 0.8f, delay2 = 0.3f;
+
+		RunAnimation(AnimationTagType.BatUpCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		yield return new WaitForSeconds(delay0);
+		RunAnimation(AnimationTagType.Bat, 0.05f, true);
+		yield return new WaitForSeconds(delay1);
+		RunAnimation(AnimationTagType.BatUpRecover, 0.05f, true);
+		yield return new WaitForSeconds(delay2);
+
+		RunAnimation(AnimationTagType.BatDiagCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		yield return new WaitForSeconds(delay0);
+		RunAnimation(AnimationTagType.BatDiag, 0.05f, true);
+		yield return new WaitForSeconds(delay1);
+		RunAnimation(AnimationTagType.BatDiagRecover, 0.05f, true);
+		yield return new WaitForSeconds(delay2);
+
+		RunAnimation(AnimationTagType.BatDownCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		yield return new WaitForSeconds(delay0);
+		RunAnimation(AnimationTagType.BatDown, 0.05f, true);
+		yield return new WaitForSeconds(delay1);
+		RunAnimation(AnimationTagType.BatDownRecover, 0.05f, true);
+		yield return new WaitForSeconds(delay2);
+
+		RunAnimation(AnimationTagType.BatDiagDown, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		yield return new WaitForSeconds(delay0);
+		RunAnimation(AnimationTagType.BatDiagDown, 0.05f, true);
+		yield return new WaitForSeconds(delay1);
+		RunAnimation(AnimationTagType.BatDiagDownRecover, 0.05f, true);
+		yield return new WaitForSeconds(delay2);
+
+		RunAnimation(AnimationTagType.BatCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		yield return new WaitForSeconds(delay0);
+		RunAnimation(AnimationTagType.Bat, 0.05f, true);
+		yield return new WaitForSeconds(delay1);
+		RunAnimation(AnimationTagType.BatRecover, 0.05f, true);
+		yield return new WaitForSeconds(delay2);
+
+		print($"Attacks demo complete.");
 	}
 
 	void AnimateChargeAttack()
@@ -504,19 +554,18 @@ public class CharacterAnimator : MonoBehaviour
 
 		if (ad == AttackDirection.Up)
 			RunAnimation(AnimationTagType.BatUpCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
+		
 		else if (ad == AttackDirection.DiagonalUp)
-		{
 			RunAnimation(AnimationTagType.BatDiagCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
-		} else if (ad == AttackDirection.Down)
-		{
+		
+		else if (ad == AttackDirection.Down)
 			RunAnimation(AnimationTagType.BatDownCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
-		} else if (ad == AttackDirection.DownForward)
-		{
+		
+		else if (ad == AttackDirection.DownForward)
 			RunAnimation(AnimationTagType.BatDiagDown, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
-		} else
-		{
+		
+		else
 			RunAnimation(AnimationTagType.BatCharge, Mathf.Lerp(0.2f, 0.03f, character.attackChargeM));
-		}
 	}
 
 	bool wasBurp;
@@ -524,36 +573,32 @@ public class CharacterAnimator : MonoBehaviour
 	{
 		if (character.tongueState == TongueState.HitPowerupBurping)
 		{
-			if (!wasBurp)
-			{
+			if (!wasBurp) {
 				frame = 0;
 				frameCounter = 0f;
 				wasBurp = true;
 			}
 
-			if (frameCounter < 0.4f)
-			{
+			if (frameCounter < 0.4f) {
 				RunAnimation(AnimationTagType.BurpStart, 0.08f, true);
-			} //# Should there be an else here?
+			} //# NOTE: Should there be an else here?
 			{
 				RunAnimation(AnimationTagType.BurpLoop, 0.1f);
 			}
-		} else if (character.tongueState == TongueState.HitEnemyTongueStunned)
-		{
+		}
+		else if (character.tongueState == TongueState.HitEnemyTongueStunned) {
 			wasBurp = false;
 			tongueTip.gameObject.SetActive(false);
 			tongueLine.enabled = false;
 			RunAnimation(AnimationTagType.FrogBlush, 0.05f);
-		} else if (!character.OnGround && character.tongueDir.y < 0)
-		{
+		}
+		else if (!character.OnGround && character.tongueDir.y < 0) {
 			wasBurp = false;
 			if (character.velocity.y >= 0)
-			{
 				RunAnimation(AnimationTagType.FrogTongueJumpDown, 0.1f, true);
-			} else
-			{
+			else
 				RunAnimation(AnimationTagType.FrogTongueJumpUp, 0.1f, true);
-			}
+
 			tongueLine.enabled = true;
 			tongueTip.gameObject.SetActive(true);
 			tongueLine.SetPosition(0, character.GetTongueOrigin());
@@ -566,16 +611,14 @@ public class CharacterAnimator : MonoBehaviour
 				tongueTip.transform.rotation = Quaternion.Euler(0f, 0f, -Vector2.Angle(Vector2.right, character.tongueDir));
 			else
 				tongueTip.transform.rotation = Quaternion.Euler(0f, 0f, Vector2.Angle(Vector2.right, character.tongueDir));
-		} else
-		{
+		}
+		else {
 			wasBurp = false;
 			if (character.tongueState == TongueState.RetractingHitEnemyTongue)
-			{
 				RunAnimation(AnimationTagType.FrogTongueStunned, 0.05f);
-			} else
-			{
+			else
 				RunAnimation(AnimationTagType.FrogTongue, 0.1f, true);
-			}
+
 			tongueLine.enabled = true;
 			tongueTip.gameObject.SetActive(true);
 			tongueLine.SetPosition(0, character.GetTongueOrigin());
@@ -590,9 +633,7 @@ public class CharacterAnimator : MonoBehaviour
 		}
 
 		if (character.wasBouncingBeforeSpecial)
-		{
 			RunTrailSilhouette();
-		}
 	}
 
 	private void AnimatePounce()
@@ -640,39 +681,36 @@ public class CharacterAnimator : MonoBehaviour
 		if (character.throwState == ThrowState.Charging)
 		{
 			if (ad == AttackDirection.Up)
-			{
 				RunAnimation(AnimationTagType.ThrowUpCharge, 0.1f, true);
-			} else if (ad == AttackDirection.DiagonalUp)
-			{
+			
+			else if (ad == AttackDirection.DiagonalUp)
 				RunAnimation(AnimationTagType.ThrowUpRightCharge, 0.1f, true);
-			} else if (ad == AttackDirection.Down)
-			{
+			
+			else if (ad == AttackDirection.Down)
 				RunAnimation(character.OnGround ? AnimationTagType.ThrowDownCharge : AnimationTagType.ThrowDownAirCharge, 0.1f, true);
-			} else if (ad == AttackDirection.DownForward)
-			{
+			
+			else if (ad == AttackDirection.DownForward)
 				RunAnimation(character.OnGround ? AnimationTagType.ThrowDownRightCharge : AnimationTagType.ThrowDownRightAirCharge, 0.1f, true);
-			} else
-			{
+			
+			else
 				RunAnimation(AnimationTagType.ThrowCharge, 0.1f, true);
-			}
-		} else
+		}
+		else
 		{
 			if (ad == AttackDirection.Up)
-			{
 				RunAnimation(AnimationTagType.ThrowUp, 0.04f, true);
-			} else if (ad == AttackDirection.DiagonalUp)
-			{
+			
+			else if (ad == AttackDirection.DiagonalUp)
 				RunAnimation(AnimationTagType.ThrowUpRight, 0.04f, true);
-			} else if (ad == AttackDirection.Down)
-			{
+			
+			else if (ad == AttackDirection.Down)
 				RunAnimation(AnimationTagType.ThrowDownAir, 0.04f, true);
-			} else if (ad == AttackDirection.DownForward)
-			{
+			
+			else if (ad == AttackDirection.DownForward)
 				RunAnimation(AnimationTagType.ThrowDownRightAir, 0.04f, true);
-			} else
-			{
+			
+			else
 				RunAnimation(AnimationTagType.Throw, 0.04f, true);
-			}
 		}
 	}
 
@@ -682,20 +720,18 @@ public class CharacterAnimator : MonoBehaviour
 
 		if (ad == AttackDirection.Up)
 			RunAnimation(AnimationTagType.Bat, 0.05f, true);
-		else if (ad == AttackDirection.DiagonalUp)
-		{
-			RunAnimation(AnimationTagType.BatDiag, 0.05f, true);
-		} else if (ad == AttackDirection.Down)
-		{
-			RunAnimation(AnimationTagType.BatDown, 0.05f, true);
-		} else if (ad == AttackDirection.DownForward)
-		{
-			RunAnimation(AnimationTagType.BatDiagDown, 0.05f, true);
-		} else
-		{
-			RunAnimation(AnimationTagType.Bat, 0.05f, true);
-		}
 
+		else if (ad == AttackDirection.DiagonalUp)
+			RunAnimation(AnimationTagType.BatDiag, 0.05f, true);
+
+		else if (ad == AttackDirection.Down)
+			RunAnimation(AnimationTagType.BatDown, 0.05f, true);
+
+		else if (ad == AttackDirection.DownForward)
+			RunAnimation(AnimationTagType.BatDiagDown, 0.05f, true);
+
+		else
+			RunAnimation(AnimationTagType.Bat, 0.05f, true);
 	}
 
 	void AnimateAttackRecover()
@@ -704,36 +740,30 @@ public class CharacterAnimator : MonoBehaviour
 
 		if (ad == AttackDirection.Up)
 			RunAnimation(AnimationTagType.BatUpRecover, 0.05f, true);
+
 		else if (ad == AttackDirection.DiagonalUp)
-		{
 			RunAnimation(AnimationTagType.BatDiagRecover, 0.05f, true);
-		} else if (ad == AttackDirection.Down)
-		{
+
+		else if (ad == AttackDirection.Down)
 			RunAnimation(AnimationTagType.BatDownRecover, 0.05f, true);
-		} else if (ad == AttackDirection.DownForward)
-		{
+
+		else if (ad == AttackDirection.DownForward)
 			RunAnimation(AnimationTagType.BatDiagDownRecover, 0.05f, true);
-		} else
-		{
+
+		else
 			RunAnimation(AnimationTagType.BatRecover, 0.05f, true);
-		}
 	}
 
 	bool havePlayedLaunchSound;
 
-
 	void AnimateBouncedFlying()
 	{
-
-		if (character.TimeBumpActive && character.timeBumpTimeScale == 0)
-		{
+		if (character.TimeBumpActive && character.timeBumpTimeScale == 0) {
 			RunAnimation(AnimationTagType.Impact, 0.05f, false, true);
 			havePlayedLaunchSound = false;
-		} else
-		if (!character.hasBounceDodged)
-		{
-			if (!havePlayedLaunchSound)
-			{
+		}
+		else if (!character.hasBounceDodged) {
+			if (!havePlayedLaunchSound) {
 				int hits = Mathf.Clamp(character.hitsTaken, 0, 5);
 				int level = 0;
 				if (hits >= 5)
@@ -743,18 +773,13 @@ public class CharacterAnimator : MonoBehaviour
 				else if (hits >= 1)
 					level = 1;
 				havePlayedLaunchSound = true;
-				if (level > 2)
-				{
+				if (level > 2) {
 					SoundController.PlaySoundEffect("Launch" + level.ToString(), 0.5f, transform.position);
 					SoundController.PlaySoundEffect("LaunchVoice" + level.ToString(), 0.5f, transform.position);
 				}
 			}
 
-			if (!character.canBounceDodge)
-			{
-
-
-
+			if (!character.canBounceDodge) {
 				float a = Vector3.Angle(Vector3.up, character.velocity);
 				if (character.velocity.x > 0f)
 					a = 360f - a;
@@ -764,57 +789,48 @@ public class CharacterAnimator : MonoBehaviour
 				p.y = 1f;
 				//#rend.transform.localPosition = p;
 
-				//# TODO: Consider transforming rendsParent instead.
-				foreach (var rendr in rends)
-				{
+				//# TODO: Consider transforming _rendsParent instead.
+				foreach (var rendr in _rends) {
 					rendr.transform.localRotation = Quaternion.Euler(0, 0, a);
 					rendr.transform.localPosition = p;
 					p.z += zIncrement;
 				}
 
 				if (character.hitsTaken > 4)
-				{
 					RunAnimation(AnimationTagType.HitComet, 1f / 25f);
-				} else if (character.hitsTaken > 2)
-				{
+				
+				else if (character.hitsTaken > 2)
 					RunAnimation(AnimationTagType.HitFly, 1f / 25f);
-				} else
-				{
+				
+				else {
 					if (variationRandomizer % 2 == 0)
-					{
 						RunAnimation(AnimationTagType.HitRotate, 0.075f);
-					} else
-					{
+					
+					else
 						RunAnimation(AnimationTagType.HitSpin, 1f / 25f);
-					}
-
 				}
 
-				if (character.hitsTaken > 2)
-				{
+				if (character.hitsTaken > 2) {
 					particleCounter += t;
-					if (particleCounter > trailDelay)
-					{
+					if (particleCounter > trailDelay) {
 						particleCounter -= trailDelay;
 						EffectsController.CreateStarParticles(character.Center, character.velocity * 0.1f, 0.5f, 1, new Color[] { Color.white, Color.black, character.player.Color });
 					}
 				}
-			} else
-			{
-
+			}
+			else {
 				float a = Vector3.Angle(Vector3.up, character.velocity);
 				if (character.velocity.x > 0f)
 					a = 360f - a;
 				//#rend.transform.localRotation = Quaternion.Euler(0, 0, a);
-				SetRendRotation(Quaternion.Euler(0, 0, a));
+				SetRendRotation(Quaternion.Euler(0, 0, a)); //#
 				RunAnimation(AnimationTagType.HitRecovered, 0.05f);
 			}
-		} else
-		{
+		}
+		else {
 			//if (flightAudioSource.isPlaying)
 			//	flightAudioSource.Stop();
 			RunAnimation(AnimationTagType.JumpSomersault, 0.04f);
-
 		}
 
 		if (character.hitsTaken > 0)
@@ -822,26 +838,17 @@ public class CharacterAnimator : MonoBehaviour
 			RunTrailSilhouette();
 			if (!character.hasBounceDodged)
 			{
-				if (Vector2.Distance(lastSmokeRingPos, character.Center) > smokeRingDistance && character.velocity.magnitude > character.maxRunSpeed && character.hitsTaken > 2)
-				{
+				if (Vector2.Distance(lastSmokeRingPos, character.Center) > smokeRingDistance && character.velocity.magnitude > character.maxRunSpeed && character.hitsTaken > 2) {
 					lastSmokeRingPos = character.Center;
 					EffectsController.CreateSmokeRing(character.Center, rend.transform.rotation, character.player.Color);
 				}
 
 				trailCounter -= t;
-				if (trailCounter < 0f)
-				{
+				if (trailCounter < 0f) {
 					trailCounter += trailDelay;
 
-					if (character.lastHitByPlayer != null)
-					{
-
-
-
-
-
-						for (int i = 0; i < character.hitsTaken; i++)
-						{
+					if (character.lastHitByPlayer != null) {
+						for (int i = 0; i < character.hitsTaken; i++) {
 							Color col = Color.white;
 							Color lerpFrom = character.player.Color;// Random.value < character.hitsTaken * 0.02f ? character.lastHitByPlayer.color : character.player.color;
 							if (Random.value < 0.5f)
@@ -856,15 +863,13 @@ public class CharacterAnimator : MonoBehaviour
 					}
 				}
 			}
-
 		}
 	}
 
 	void RunTrailSilhouette()
 	{
 		trailFaderCounter -= Time.deltaTime;
-		if (trailFaderCounter <= 0f)
-		{
+		if (trailFaderCounter <= 0f) {
 			trailNumber++;
 			trailFaderCounter += trailDelay * 2f;
 			EffectsController.CreateTrailFader(this, 0.1f + character.hitsTaken * 0.15f, Color.Lerp(character.lastHitByPlayer.Color, Color.white, Mathf.PingPong(trailNumber * 0.2f, 1f)));
@@ -874,20 +879,18 @@ public class CharacterAnimator : MonoBehaviour
 	void RunTrailSilhouettePoweredUp(Color color)
 	{
 		trailFaderCounter -= Time.deltaTime;
-		if (trailFaderCounter <= 0f)
-		{
+		if (trailFaderCounter <= 0f) {
 			trailNumber++;
 			trailFaderCounter += trailDelay * 7f;
-			if (trailNumber % 3 == 0)
-			{
+			if (trailNumber % 3 == 0) {
 				//#rend.color = Color.white;
 				SetRendColor(Color.white);
-			} else if (trailNumber % 3 == 1)
-			{
+			}
+			else if (trailNumber % 3 == 1) {
 				//#rend.color = color;
 				SetRendColor(color);
-			} else
-			{
+			}
+			else {
 				//customizer.SetColor(character.player.Color);
 				//#rend.color = Color.white;
 				SetRendColor(Color.white);
@@ -901,19 +904,14 @@ public class CharacterAnimator : MonoBehaviour
 	{
 		if (character.state == CharacterState.Bouncing)
 		{
-			if (character.TimeBumpActive && character.timeBumpTimeScale == 0)
-			{
+			if (character.TimeBumpActive && character.timeBumpTimeScale == 0) {
 				if (flightAudioSource.isPlaying)
-				{
 					flightAudioSource.Stop();
-				}
 				flightOrigin = character.transform.position.y;
-			} else
-			if (!character.hasBounceDodged)
-			{
+			}
+			else if (!character.hasBounceDodged) {
 				flightAudioSource.volume = 0.15f;
-				if (!flightAudioSource.isPlaying)
-				{
+				if (!flightAudioSource.isPlaying) {
 					if (character.hitsTaken > 4)
 						flightAudioSource.clip = flight[2];
 					else if (character.hitsTaken > 2)
@@ -926,66 +924,57 @@ public class CharacterAnimator : MonoBehaviour
 				if (modFlightVolume)
 					flightAudioSource.volume = character.velocity.magnitude * flightVelocityVolumeMod;
 
-			} else if (flightAudioSource.isPlaying)
-			{
-				flightAudioSource.Stop();
 			}
-		} else
-		{
-			flightAudioSource.volume = Mathf.MoveTowards(flightAudioSource.volume, 0f, Time.deltaTime * 2f);
+			else if (flightAudioSource.isPlaying)
+				flightAudioSource.Stop();
 		}
+		else
+			flightAudioSource.volume = Mathf.MoveTowards(flightAudioSource.volume, 0f, Time.deltaTime * 2f);
 	}
 	int trailNumber;
 	void AnimateJumping()
 	{
-		if (character.velocity.y < character.gravityGraceThreshold && character.player != null && character.player.Input != null && character.player.Input.aButton && character.gravityGraceTimeLeft > 0f)
-		{
+		if (character.velocity.y < character.gravityGraceThreshold && character.player != null && character.player.Input != null && character.player.Input.aButton && character.gravityGraceTimeLeft > 0f) {
 			float m = 1f - character.gravityGraceTimeLeft / character.gravityGraceTime;
 			SetFrame(AnimationTagType.JumpSomersault, (int)(m * AnimationTags.JumpSomersault.frameCount));
-		} else if (character.Velocity.y > 0f)
-		{
+		}
+		else if (character.Velocity.y > 0f) {
 			if (frame < AnimationTags.JumpLaunch.frameCount)
 			{
 				SetFrame(AnimationTagType.JumpLaunch);
 				frameCounter += t;
-				if (frameCounter > 0.05f)
-				{
+				if (frameCounter > 0.05f) {
 					frame++;
 					frameCounter = 0f;
 				}
-			} else
-			{
+			}
+			else {
 				//transform.localPosition = defaultOffset;
 				RunAnimation(AnimationTagType.JumpUp, 0.05f);
 			}
-		} else
-		{
+		}
+		else {
 			RunAnimation(AnimationTagType.JumpDownArmsOut, 0.05f);
 		}
 	}
 
 	void AnimateSkid()
 	{
-		if (Mathf.Abs(transform.position.x - lastSkidXPos) > skidEffectDistance && (Mathf.Abs(character.velocity.x) > character.maxRunSpeed))
-		{
+		if (Mathf.Abs(transform.position.x - lastSkidXPos) > skidEffectDistance && (Mathf.Abs(character.velocity.x) > character.maxRunSpeed)) {
 			lastSkidXPos = transform.position.x;
 			EffectsController.CreateJumpPuffSkew(transform.position, character.FacingDirection);
 		}
 
-		if (frame == 0)
-		{
+		if (frame == 0) {
 			SetFrame(AnimationTagType.SkidLand);
 			frameCounter += t;
-			if (frameCounter > 0.075f)
-			{
+			if (frameCounter > 0.075f) {
 				frame++;
 				frameCounter = 0f;
 			}
-		} else
-		{
-
-			RunAnimation(AnimationTagType.Skid, 0.05f);
 		}
+		else
+			RunAnimation(AnimationTagType.Skid, 0.05f);
 
 		if (character.hitsTaken > 0)
 			RunTrailSilhouette();
@@ -993,13 +982,18 @@ public class CharacterAnimator : MonoBehaviour
 
 	internal void RunAnimation(AnimationTagType tag, float frameDelay, bool clamp = false, bool ignoreCharacterTimescale = false)
 	{
+#if DEBUG_TEST
+		frameDelay *= 0.5f; //##
+		//#frame++;
+		//#print($"CharacterAnimator.RunAnimation: frame: [{frame}]");
+#endif
 		frameCounter += ignoreCharacterTimescale ? Time.deltaTime : t;
 
-		if (frameCounter > frameDelay || frame < 0)
-		{
+		if (frameCounter > frameDelay || frame < 0) {
 			frame++;
 			frameCounter -= frameDelay;
 		}
+
 		RunFrame(tag, frame, clamp);
 	}
 
@@ -1014,92 +1008,125 @@ public class CharacterAnimator : MonoBehaviour
 		if (character.state == CharacterState.Bouncing)
 		{
 			if (character.OnGround)
-			{
 				return AnimState.Skidding;
-			} else
-			{
+			else
 				return AnimState.BouncedInAir;
-			}
-		} else if (character.state == CharacterState.Attacking)
+		}
+		else if (character.state == CharacterState.Attacking)
 		{
 			if (character.attackState == AttackState.Charging)
-			{
 				return AnimState.ChargeAttack;
-			} else if (character.attackState == AttackState.Attacking)
-			{
+			else if (character.attackState == AttackState.Attacking)
 				return AnimState.Attacking;
-			} else if (character.attackState == AttackState.Recovering)
-			{
+			else if (character.attackState == AttackState.Recovering)
 				return AnimState.AttackRecover;
-			}
-		} else if (character.state == CharacterState.Special && character.type == CharacterType.Frog)
-		{
+		}
+		else if (character.state == CharacterState.Special && character.type == CharacterType.Frog)
 			return AnimState.Tongue;
-		} else if (character.state == CharacterState.Special && (character.type == CharacterType.Ape || character.type == CharacterType.Human))
-		{
+		else if (character.state == CharacterState.Special && (character.type == CharacterType.Ape || character.type == CharacterType.Human))
 			return AnimState.Throw;
-		} else if (character.state == CharacterState.Special && character.type == CharacterType.Alien)
-		{
+		else if (character.state == CharacterState.Special && character.type == CharacterType.Alien)
 			return AnimState.Teleport;
-		} else if (character.state == CharacterState.Special && character.type == CharacterType.Doge)
-		{
+		else if (character.state == CharacterState.Special && character.type == CharacterType.Doge)
 			return AnimState.SpinDash;
-		} else if (character.state == CharacterState.Special && character.type == CharacterType.Cat)
-		{
+		else if (character.state == CharacterState.Special && character.type == CharacterType.Cat)
 			return AnimState.Pounce;
-		}/*# else if (character.OnGround && Mathf.Abs(character.Velocity.x) > 0f)
-		{
+		/*#else if (character.OnGround && Mathf.Abs(character.Velocity.x) > 0f)
 			return AnimState.Running;
-		} else if (!character.OnGround)
-		{
-			if (character.WallSliding)
-			{
+		else if (!character.OnGround) {
+			if (character.WallSliding) {
 				return AnimState.WallSlide;
-			} else
-			{
-				return AnimState.Jumping;
 			}
+			else
+				return AnimState.Jumping;
 		}#*/
 
 		return AnimState.Idle;
 	}
 
-	public Sprite GetFrame(AnimationTagType tag, int frame)
-	//#public List<Sprite> GetFrame(AnimationTagType tag, int frame)
+	//#public Sprite GetFrame(AnimationTagType tag, int frame)
+	public List<Sprite> GetFrame(AnimationTagType tag, int frame)
 	{
 		int absFrame = AnimationTags.tags[tag].frames[frame];
+		//#print($"CharacterAnimator.GetFrame: 01, [{tag}], [{AnimationTags.tags[tag].frameCount}]");
+		//#print($"CharacterAnimator.GetFrame: 99, [{GetFrameAbsolute(absFrame)}]");
 		return GetFrameAbsolute(absFrame);
 	}
 
-	public Sprite GetFrameAbsolute(int frame)
-	//#public List<Sprite> GetFrameAbsolute(int frame)
+	//#public Sprite GetFrameAbsolute(int frame)
+	public List<Sprite> GetFrameAbsolute(int frame)
 	{
-		return character.player != null && character.player.degen != null && character.player.degen.sprites != null &&
-			frame < character.player.degen.sprites.Count ? character.player.degen.sprites[frame] : null;
-		/*
-				//#return character.player != null && character.player.degen != null && character.player.degen.sprites != null &&
-				//#	frame < character.player.degen.sprites.Count ? character.player.degen.sprites[frame] : null;
-				//#return character.player?.degen?.sprites != null &&
-				//#	frame < character.player.degen.sprites.Count ? character.player.degen.sprites[frame] : null;
-				if (character.player?.degen?.sprites != null)
-				{
-					if (frame == 0)
-						return new List<Sprite>() { character.player.degen.sprites[0] };
+		//#return character.player != null && character.player.degen != null && character.player.degen.sprites != null &&
+		//#	frame < character.player.degen.sprites.Count ? character.player.degen.sprites[frame] : null;
 
-					List<Sprite> spriteList = new List<Sprite>();
-					int idx = (frame - 1) * rends.Count;
-					for (int i = 0; i < rends.Count; i++)
-					{
-						idx++;
-						if (idx < character.player.degen.sprites.Count)
-							spriteList.Add(character.player.degen.sprites[idx]);
-					}
-					if (spriteList.Count > 0)
-						return spriteList;
+		//#return character.player?.degen?.sprites != null &&
+		//#	frame < character.player.degen.sprites.Count ? character.player.degen.sprites[frame] : null;
+
+		//#print($"CharacterAnimator.GetFrameAbsolute: 02 [{character.player}], [{character.player?.degen}], [{character.player?.degen?.sprites}], [{character.player?.degen?.sprites?[0]}]");
+		/*#
+		if (character.player?.degen?.sprites != null)
+		{
+			int maxCount = character.player.degen.sprites.Count;
+			if (frame < maxCount)
+			{
+				if (frame == 0)
+					return new List<Sprite>() { character.player.degen.sprites[0] };
+
+				List<Sprite> spriteList = new List<Sprite>();
+				#*//*#
+				int idx = (frame - 1) * _rends.Count;
+				for (int i = 0; i < _rends.Count; i++)
+				{
+					idx++;
+					if (idx < maxCount)
+						spriteList.Add(character.player.degen.sprites[idx]);
+				}
+				#*//*#
+				int idx = frame * _rends.Count; //#(frame - 1)
+				for (int i = 0; i < _rends.Count; i++)
+				{
+					if (idx < maxCount)
+						spriteList.Add(character.player.degen.sprites[idx]);
+					idx++;
 				}
 
-				return null;
-		*/
+				if (spriteList.Count > 0)
+					return spriteList;
+			}
+		}
+		#*/
+		//#print($"CharacterAnimator.GetFrameAbsolute: 03 [{CustomizationManager.I.sprites?.Count}]");
+		if (CustomizationManager.I.sprites != null)
+		{
+			int maxCount = CustomizationManager.I.sprites.Count;
+			if (frame < maxCount)
+			{
+				//#if (frame == 0)
+				//#	return new List<Sprite>() { CustomizationManager.I.sprites[0] };
+
+				List<Sprite> spriteList = new List<Sprite>();
+				/*#
+				int idx = (frame - 1) * _rends.Count;
+				for (int i = 0; i < _rends.Count; i++) {
+					idx++;
+					if (idx < maxCount)
+						spriteList.Add(CustomizationManager.I.sprites[idx]);
+				}
+				#*/
+				int idx = frame * _rends.Count; //#(frame - 1)
+				for (int i = 0; i < _rends.Count; i++)
+				{
+					if (idx < maxCount)
+						spriteList.Add(CustomizationManager.I.sprites[idx]);
+					idx++;
+				}
+
+				if (spriteList.Count > 0)
+					return spriteList;
+			}
+		}
+
+		return null;
 	}
 
 	public void SetFrame(AnimationTagType tag)
@@ -1124,51 +1151,74 @@ public class CharacterAnimator : MonoBehaviour
 	{
 		int frameCount = AnimationTags.tags[tag].frameCount;
 		if (clamp)
-		{
 			SetFrame(tag, Mathf.Clamp(frame, 0, frameCount - 1));
-		} else
-		{
+		else
 			SetFrame(tag, frame % frameCount);
-		}
 	}
-
+	/*#
 	public void SetRendFrame(Sprite sprite)
 	{
 		rend.sprite = sprite;
 	}
-	
+	#*/
 	public void SetRendFrame(List<Sprite> spriteList)
 	{
 		//# TODO: If this remains short, fold into SetFrame and SetFrameAbsolute methods.
-		for (int i = 0; i < rends.Count; i++)
-			rends[i].sprite = i < spriteList.Count ? spriteList[i] : null;
+		//for (int i = 0; i < _rends.Count; i++)
+		//	_rends[i].sprite = i < spriteList.Count ? spriteList[i] : null;
+		
+		if (spriteList == null || spriteList.Count < 8) {
+			print($"CharacterRenderer.SetRendFrame: [{spriteList}], [{spriteList?.Count}]");
+			return;
+		}
+
+		charLayer0.sprite = spriteList[0]; //# TODO: Change to dictionary
+		batLayer0.sprite = spriteList[1];
+		charLayer1.sprite = spriteList[2];
+		capeLayer0.sprite = spriteList[3];
+		batLayer1.sprite = spriteList[4];
+		charLayer2.sprite = spriteList[5];
+		capeLayer1.sprite = spriteList[6];
+		charLayer3.sprite = spriteList[7];
+		//haloLayer0.sprite = spriteList[8];
+		/*#
+		charLayer0.sprite = spriteList[0]; //# TODO: Change to dictionary
+		charLayer1.sprite = spriteList[1];
+		charLayer2.sprite = spriteList[2];
+		charLayer3.sprite = spriteList[3];
+		batLayer0.sprite = spriteList[4];
+		batLayer1.sprite = spriteList[5];
+		capeLayer0.sprite = spriteList[6];
+		capeLayer1.sprite = spriteList[7];
+		//haloLayer0.sprite = spriteList[8];
+		#*/
 	}
-	
+
 	void SetRendColor(Color color)
 	{
 		//# TODO: Consider: Do all rend layers need to change colors?
-		foreach (var rendr in rends)
+		foreach (var rendr in _rends)
 			rendr.color = color;
 	}
 
 	void SetRendFlipX()
 	{
-		//# TODO: Consider flipping rendsParent instead.
-		foreach (var rendr in rends)
+		//# TODO: Consider flipping _rendsParent instead.
+		foreach (var rendr in _rends)
 			rendr.flipX = character.FacingDirection < 0;
 	}
 
 	void SetRendRotation(Quaternion rotation)
 	{
-		//# TODO: Consider rotating rendsParent instead.
-		foreach (var rendr in rends)
+		//# TODO: Consider rotating _rendsParent instead.
+		foreach (var rendr in _rends)
 			rendr.transform.localRotation = rotation;
 	}
 
 	void SetRendPosition(Vector3 position)
 	{
-		//# TODO: Consider moving rendsParent instead.
-		foreach (var rendr in rends)
+		//# TODO: Consider moving _rendsParent instead.
+		foreach (var rendr in _rends)
 		{
 			rendr.transform.localPosition = position;
 			position.z += zIncrement;
@@ -1177,24 +1227,21 @@ public class CharacterAnimator : MonoBehaviour
 
 	void SetRendScale(Vector3 scale)
 	{
-		//# TODO: Consider scaling rendsParent instead.
-		foreach (var rendr in rends)
+		//# TODO: Consider scaling _rendsParent instead.
+		foreach (var rendr in _rends)
 			rendr.transform.localScale = scale;
 	}
 
 	[NaughtyAttributes.Button]
-	private void ExportIcon()
+	private void ExportIcon() //# Update to create composite of composites.
 	{
 		string path = Application.dataPath + "/Sprites/CharacterIcons/";
-		Sprite iconSprite = GetFrameAbsolute(0);
-		System.IO.File.WriteAllBytes($"{path}/{XUtils.Timestamp()}.png", iconSprite.texture.EncodeToPNG());
-		/*#
 		//#Sprite iconSprite = GetFrameAbsolute(0);
 		//#System.IO.File.WriteAllBytes($"{path}/{XUtils.Timestamp()}.png", iconSprite.texture.EncodeToPNG());
+
 		List<Sprite> iconSprites = GetFrameAbsolute(0);
 		if (iconSprites.Count > 0)
 			System.IO.File.WriteAllBytes($"{path}/{XUtils.Timestamp()}.png", iconSprites[0].texture.EncodeToPNG());
-		#*/
 	}
 	/*#
 	public void EnableCharacterScripts(bool enabled)

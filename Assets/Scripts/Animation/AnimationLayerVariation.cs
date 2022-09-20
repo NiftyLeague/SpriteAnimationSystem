@@ -85,8 +85,18 @@ public class AnimationLayerVariation : MonoBehaviour
 
 	public void ClearLayerData()
 	{
-		Addressables.Release(layerData);
-		layerData = null;
+		//#if (layerData == null)
+		//#	print($"AnimationLayerVariation.ClearLayerData: layerData == null"); //##
+		//#else
+		//#{
+			//#if (layerData.layer.StartsWith("bat")) //#
+			//#	print($"AnimationLayerVariation.ClearLayerData: [{layerData.layer}]"); //##
+			if (layerData != null)
+			{
+			Addressables.Release(layerData);
+			layerData = null;
+			}
+		//#}
 		layerDataLoaded = false;
 		if (layerDataLoadOp.IsValid())
 		{

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AccessoryOptionEnumrator : OptionEnumarator
+public class AccessoryOptionEnumrator : OptionEnumarator //# TODO: Change Enumrator and Enumarator to Enumerator
 {
 	public object Id { get; }
 

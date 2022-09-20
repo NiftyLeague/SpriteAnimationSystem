@@ -1,13 +1,13 @@
 using NaughtyAttributes;
-using Newtonsoft.Json.Linq;
+//#using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+//#using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEngine.Networking;
+//#using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class CustomizationManager : MonoBehaviour
@@ -51,15 +51,17 @@ public class CustomizationManager : MonoBehaviour
 		{ Names.Clothing, new string[] { Names.Top, Names.Outerwear, Names.Print, Names.Bottom, Names.Footwear, Names.Belt } },
 		{ Names.Accessories, new string[] { Names.Hat, Names.Eyewear, Names.Piercing, Names.Wrist, Names.Hands, Names.Neckwear } },
 		{ Names.Items, new string[] { Names.LeftItem, Names.RightItem } },
+		{ Names.Wearables, new string[] { Names.Bat, Names.Cape, Names.Companion, Names.Halo } }, //#
 	};
 	private static string[] traitKeys = new string[] {
 		Names.Tribe, Names.SkinColor, Names.FurColor, Names.EyeColor, Names.PupilColor, Names.Hair, Names.Mouth, Names.Beard, Names.Top,
 		Names.Outerwear, Names.Print, Names.Bottom, Names.Footwear, Names.Belt, Names.Hat, Names.Eyewear, Names.Piercing, Names.Wrist,
 		Names.Hands, Names.Neckwear, Names.LeftItem, Names.RightItem,
+		Names.Bat, Names.Cape, Names.Companion, Names.Halo, //# Wearables
 	};
 
 	private static Dictionary<string, string[]> subcategoryOptionKeys = new Dictionary<string, string[]> {
-		{ Names.Tribe, new string[] { "Ape", "Human", "Doge", "Frog", "Cat", "Alien" } },
+		{ Names.Tribe, new string[] { "Ape", "Human", "Doge", "Frog", "Cat", "Alien" } }, //#, "Seventh"
 	};
 
 	private static Dictionary<string, AccessoryType> accessoryTypeMap = new Dictionary<string, AccessoryType> {
@@ -80,6 +82,13 @@ public class CustomizationManager : MonoBehaviour
 		{ Names.RightItem, AccessoryType.RightItem },
 		{ Names.Top, AccessoryType.Top },
 		{ Names.Wrist, AccessoryType.Wrist }
+	};
+
+	private static Dictionary<string, WearableType> wearableTypeMap = new Dictionary<string, WearableType> {
+		{ Names.Bat, WearableType.Bat },
+		{ Names.Cape, WearableType.Cape },
+		{ Names.Companion, WearableType.Companion },
+		{ Names.Halo, WearableType.Halo }
 	};
 
 	private static Dictionary<string, Trait> traits = new Dictionary<string, Trait>
@@ -106,6 +115,10 @@ public class CustomizationManager : MonoBehaviour
 		{ Names.Neckwear, TraitInfo.EmptyTrait },
 		{ Names.LeftItem, TraitInfo.EmptyTrait },
 		{ Names.RightItem, TraitInfo.EmptyTrait },
+		{ Names.Bat, TraitInfo.EmptyTrait }, //#
+		{ Names.Cape, TraitInfo.EmptyTrait }, //#
+		{ Names.Companion, TraitInfo.EmptyTrait }, //#
+		{ Names.Halo, TraitInfo.EmptyTrait }, //#
 	};
 
 	private static Dictionary<AnimationLayer, string> animationLayerSubcategoryMap = new Dictionary<AnimationLayer, string>();
@@ -262,6 +275,11 @@ public class CustomizationManager : MonoBehaviour
 
 	public static void GenerateSprites(Dictionary<string, Trait> traits, Action<List<Sprite>, string> onRasterizationComplete, bool isImportant)
 	{
+		//#string traitStr = "";
+		//#foreach (var t in traitKeys)
+		//#{
+		//#	traitStr += $"{t}:{traits[t].id}";
+		//#}
 		string traitStr = GetTraitString(traits);
 #if DEBUG_TEST //# ----------
 		print($"CustomizationManager.GenerateSprites: {traitStr}");
@@ -269,29 +287,40 @@ public class CustomizationManager : MonoBehaviour
 		I.spriteRasterizer.RasterizeAllFrames(traits, Utils.GetSHA1Hash(traitStr), onRasterizationComplete, isImportant);
 	}
 
+	//#private List<Sprite> spritesRendered; //#
 	private void OnRasterizationComplete(List<Sprite> sprites, string traitHash)
 	{
 		this.sprites = sprites;
 #if DEBUG_TEST //# ----------
-		int f = 20 * 5;
-		sprite0 = sprites[f];
-		sprite1 = sprites[f + 1];
-		sprite2 = sprites[f + 2];
-		sprite3 = sprites[f + 3];
-		sprite4 = sprites[f + 4];
-		f = 54 * 5;
-		sprite5 = sprites[f];
-		sprite6 = sprites[f + 1];
-		sprite7 = sprites[f + 2];
-		sprite8 = sprites[f + 3];
-		sprite9 = sprites[f + 4];
+		//# Hard-coded previews
+		int f = 20 * 8;
+		spPreviewA0 = sprites[f];
+		spPreviewA1 = sprites[f + 1];
+		spPreviewA2 = sprites[f + 2];
+		spPreviewA3 = sprites[f + 3];
+		spPreviewA4 = sprites[f + 4];
+		spPreviewA5 = sprites[f + 5];
+		spPreviewA6 = sprites[f + 6];
+		spPreviewA7 = sprites[f + 7];
+		f = 54 * 8;
+		spPreviewB0 = sprites[f];
+		spPreviewB1 = sprites[f + 1];
+		spPreviewB2 = sprites[f + 2];
+		spPreviewB3 = sprites[f + 3];
+		spPreviewB4 = sprites[f + 4];
+		spPreviewB5 = sprites[f + 5];
+		spPreviewB6 = sprites[f + 6];
+		spPreviewB7 = sprites[f + 7];
+
 		showActions = true;
 		print($"CustomizationManager.OnRasterizationComplete: {(Time.time - dirtyStartTime):F4} seconds elapsed.");
+		//##I.spriteRasterizer.cc.TestAllLayerData("SpriteRasterizer.OnRasterizationComplete 0.1: "); //#
 		//#I.spriteRasterizer.cc.ClearLayers();
 		//# Note: Reference ResetCharacter(){I.InitializeCharacter(true); I.CharacterTypeChanged(true);}
 		//# Note: Reference SetCompositeLayers(AnimationLayerVariation[] animationLayerVariations)
 		//#I.spriteRasterizer.cc.SetCompositeLayers();
-		InitializeCompositeCharacter(true); //#(AnimationLayerVariation headLayer, _) =
+		//###InitializeCompositeCharacter(true); //#(AnimationLayerVariation headLayer, _) =
+		//##I.spriteRasterizer.cc.TestAllLayerData("SpriteRasterizer.OnRasterizationComplete 0.2: "); //#
 #endif
 	}
 
@@ -332,6 +361,12 @@ public class CustomizationManager : MonoBehaviour
 				}
 			}
 			return null;
+		// TODO: Consider making some wearables information available, if desired.
+		//#case Names.Bat: //#
+		//#case Names.Cape: //#
+		//#case Names.Companion: //#
+		//#case Names.Halo: //#
+		//#	return null;
 		}
 		return null;
 	}
@@ -340,7 +375,12 @@ public class CustomizationManager : MonoBehaviour
 	{
 		return cs.GetCurrentAccessoryOption(variations);
 	}
-
+	/*#
+	private WearableOptionEnumrator.WearableOption GetCurrentWearableSelection(string optionId, AnimationLayerVariation[] variations)
+	{
+		return cs.GetCurrentWearableOption(variations);
+	}
+	#*/
 	public static void SetActionState(int state, bool setOption)
 	{
 		if (state != I.frame)
@@ -425,7 +465,7 @@ public class CustomizationManager : MonoBehaviour
 		}
 	}
 #*/
-		private void OnSubcategoryOptionsChanged(OptionEnumarator options)
+	private void OnSubcategoryOptionsChanged(OptionEnumarator options)
 	{
 		OnChange();
 		object key = options.Id;
@@ -529,6 +569,12 @@ public class CustomizationManager : MonoBehaviour
 		case Names.PupilColor:
 			trait = TraitInfo.GetTrait(characterType, option.Key);
 			break;
+		// TODO: Consider making some wearables information available, if desired.
+		//#case Names.Bat: //#
+		//#case Names.Cape: //#
+		//#case Names.Companion: //#
+		//#case Names.Halo: //#
+		//#	break;
 		default:
 			if (string.IsNullOrEmpty(option.Key) || !(option.Value is AccessoryOptionEnumrator.AccessoryOption))
 			{
@@ -600,8 +646,8 @@ public class CustomizationManager : MonoBehaviour
 			}
 		}
 		
-		print($"InitializeCharacterMap: {charLayerMap.ToArray()}");
-		print($"InitializeCharacterMap: {compositeCharLayerMap.ToArray()}");#*/
+		print($"CustomizationManager.InitializeCharacterMap: {charLayerMap.ToArray()}");
+		print($"CustomizationManager.InitializeCharacterMap: {compositeCharLayerMap.ToArray()}");#*/
 	}
 
 	public static void Reset()
@@ -775,6 +821,8 @@ public class CustomizationManager : MonoBehaviour
 
 	private void SetSkinColor(AnimationLayerVariation.ColorVariationInfo cvi)
 	{
+		// TODO: Consider making some companion skins adjustable, if desired.
+		
 		switch (characterType)
 		{
 		case CharacterType.Alien:
@@ -800,6 +848,8 @@ public class CustomizationManager : MonoBehaviour
 
 	private void SetSecondarySkinColor(AnimationLayerVariation.ColorVariationInfo cvi)
 	{
+		// TODO: Consider making some companion secondary skins adjustable, if desired.
+		
 		switch (characterType)
 		{
 		case CharacterType.Ape:
@@ -965,7 +1015,7 @@ public class CustomizationManager : MonoBehaviour
 
 	public void UI_SubmitTraitMap()
 	{
-		string traitStr = GetTraitsString(traits);
+		string traitStr = GetTraitString(traits); //#GetTraitsString
 		SetFromTraitsString(traitStr);
 		if (onSubmitTraits != null)
 		{
@@ -989,21 +1039,88 @@ public class CustomizationManager : MonoBehaviour
 		string res = "[";
 		foreach (string key in traitKeys)
 		{
-			res += $"\n  [\"{key}\", {traits[key].id}],";
-			//res += $"\n  [\"{key}\", {traits[key].id}, \"{traits[key].name}\"],"; //#
+			//res += $"\n  [\"{key}\", {traits[key].id}],";
+			res += $"\n  [\"{key}\", {traits[key].id}, \"{traits[key].name}\"],"; //#
 		}
 		res = res.Substring(0, res.Length - 1);
 		res += "\n]";
 		return res;
 	}
 
+#if DEBUG_TEST //# ----------
+	internal Dictionary<string, Trait> GetDevDegenTraits()
+	{
+		print($"CustomizationManager.GetDevDegenTraits: DevDegen: [{DevDegen}]");
+		
+		Dictionary<string, Trait> traits = new Dictionary<string, Trait>();
+		int[] intTraits = Array.ConvertAll(DevDegen.Split(','), int.Parse);
+		for (int i = 0; i < intTraits.Length; i++)
+		{
+			string key = traitKeys[i];
+			int traitId = intTraits[i];
+			Trait trait = TraitInfo.traits[traitId];
+			traits.Add(key, trait);
+			print($"\ti: {i}, key: {key}, traitId: {traitId}, trait.name: {trait.name}");
+		}
+		for (int i = intTraits.Length; i < traitKeys.Length; i++)
+		{
+			string key = traitKeys[i];
+			Trait trait = TraitInfo.EmptyTrait;
+			traits.Add(key, trait);
+			print($"\ti: {i}, key: {key}, traitId: -0-, trait.name: {trait.name}");
+		}
+
+		string traitStr = GetTraitsString(traits);
+		SetFromTraitsString(traitStr);
+
+		print(traitStr); //(GetTraitsString(traits));
+		return traits;
+		
+
+		//#Dictionary<string, Trait> traits = new Dictionary<string, Trait>();
+		string characterString = XRandom.NextMember(subcategoryOptionKeys[Names.Tribe]);
+		CharacterType characterType = AnimationManager.GetCharacterType(characterString);
+		traits[Names.Tribe] = TraitInfo.GetTrait(characterType, characterString);
+		foreach (string key in traitKeys)
+		{
+			switch (key)
+			{
+				case Names.Tribe:
+					continue;
+				case Names.SkinColor:
+				case Names.FurColor:
+				case Names.EyeColor:
+				case Names.PupilColor:
+					traits.Add(key, TraitInfo.GetRandomTrait(characterType, key, removedTraits));
+					break;
+				case Names.Bat: //#
+				case Names.Cape: //#
+				case Names.Companion: //#
+				case Names.Halo: //#
+					Trait randomTrait = TraitInfo.GetRandomTrait(characterType, wearableTypeMap[key], removedTraits);
+					print($"\tkey: {key}, randomTrait.id: {randomTrait.id}, .name: {randomTrait.name}");
+					traits.Add(key, randomTrait);
+					break;
+				default:
+					randomTrait = TraitInfo.GetRandomTrait(characterType, accessoryTypeMap[key], removedTraits);
+					//#print($"\tkey: {key}, randomTrait.id: {randomTrait.id}, .name: {randomTrait.name}");
+					traits.Add(key, randomTrait);
+					break;
+			}
+		}
+		//#rndTraits = GetTraitsString(traits);
+		print(GetTraitsString(traits));
+		return traits;
+	}
+#endif
+
 	//#[Button]
 	internal Dictionary<string, Trait> GetRandomTraits()
 	{
-		Dictionary<string, Trait> randomTraits = new Dictionary<string, Trait>();
+		Dictionary<string, Trait> traits = new Dictionary<string, Trait>();
 		string characterString = XRandom.NextMember(subcategoryOptionKeys[Names.Tribe]);
 		CharacterType characterType = AnimationManager.GetCharacterType(characterString);
-		randomTraits[Names.Tribe] = TraitInfo.GetTrait(characterType, characterString);
+		traits[Names.Tribe] = TraitInfo.GetTrait(characterType, characterString);
 		foreach (string key in traitKeys)
 		{
 			switch (key)
@@ -1014,31 +1131,39 @@ public class CustomizationManager : MonoBehaviour
 			case Names.FurColor:
 			case Names.EyeColor:
 			case Names.PupilColor:
-				randomTraits.Add(key, TraitInfo.GetRandomTrait(characterType, key, removedTraits));
+				traits.Add(key, TraitInfo.GetRandomTrait(characterType, key, removedTraits));
+				break;
+			case Names.Bat: //#
+			case Names.Cape: //#
+			case Names.Companion: //#
+			case Names.Halo: //#
+				Trait randomTrait = TraitInfo.GetRandomTrait(characterType, wearableTypeMap[key], removedTraits);
+				print($"\tkey: {key}, randomTrait.id: {randomTrait.id}, .name: {randomTrait.name}");
+				traits.Add(key, randomTrait);
 				break;
 			default:
 #if DEBUG_TEST //# ----------
-				Trait randomTrait = TraitInfo.GetRandomTrait(characterType, accessoryTypeMap[key], removedTraits);
+				randomTrait = TraitInfo.GetRandomTrait(characterType, accessoryTypeMap[key], removedTraits);
 				//#print($"\tkey: {key}, randomTrait.id: {randomTrait.id}, .name: {randomTrait.name}");
-				randomTraits.Add(key, randomTrait);
+				traits.Add(key, randomTrait);
 #else
 				if (XRandom.NextFloat() > randomizationProbabiity)
 				{
-					randomTraits.Add(key, TraitInfo.GetRandomTrait(characterType, accessoryTypeMap[key], removedTraits));
+					traits.Add(key, TraitInfo.GetRandomTrait(characterType, accessoryTypeMap[key], removedTraits));
 				}
 				else
 				{
-					randomTraits.Add(key, TraitInfo.EmptyTrait);
+					traits.Add(key, TraitInfo.EmptyTrait);
 				}
 #endif
 				break;
 			}
 		}
 #if DEBUG_TEST //# ----------
-		//#rndTraits = GetTraitsString(randomTraits);
-		print(GetTraitsString(randomTraits));
+		//#rndTraits = GetTraitsString(traits);
+		print(GetTraitsString(traits));
 #endif
-		return randomTraits;
+		return traits;
 	}
 
 	public static void RandomizeTraits()
@@ -1083,39 +1208,74 @@ public class CustomizationManager : MonoBehaviour
 	public bool devUseCache = true; //false; //
 	public bool devSavePng = false; //true; //
 	public bool devSaveSharedItemsPng = false; //true;
+	public bool generateSprites = true;
+	public bool showPreviews = false;
+	private bool showActions = false;
 	private float dirtyStartTime;
-	private bool showActions;
 
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer0")] public Sprite sprite0;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("batLayer0 (bat above)")] public Sprite sprite1;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer1")] public Sprite sprite2;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("batLayer1 (bat below)")] public Sprite sprite3;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer2")] public Sprite sprite4;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer0")]
+	public Sprite spPreviewA0;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("batLayer0 (bat above)")]
+	public Sprite spPreviewA1;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer1")]
+	public Sprite spPreviewA2;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("capeLayer0 (cape above)")]
+	public Sprite spPreviewA3;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("batLayer1 (bat below)")]
+	public Sprite spPreviewA4;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer2")]
+	public Sprite spPreviewA5;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("capeLayer1 (bat below)")]
+	public Sprite spPreviewA6;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer3")]
+	public Sprite spPreviewA7;
 
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer0")] public Sprite sprite5;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("batLayer0 (bat above)")] public Sprite sprite6;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer1")] public Sprite sprite7;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("batLayer1 (bat below)")] public Sprite sprite8;
-	[ShowAssetPreview, ShowIf("showActions"), Tooltip("chrLayer2")] public Sprite sprite9;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer0")]
+	public Sprite spPreviewB0;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("batLayer0 (bat above)")]
+	public Sprite spPreviewB1;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer1")]
+	public Sprite spPreviewB2;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("capeLayer0 (cape above)")]
+	public Sprite spPreviewB3;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("batLayer1 (bat below)")]
+	public Sprite spPreviewB4;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer2")]
+	public Sprite spPreviewB5;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("capeLayer1 (bat below)")]
+	public Sprite spPreviewB6;
+	[ShowAssetPreview, ShowIf(EConditionOperator.And, "generateSprites", "showPreviews", "showActions"), Tooltip("chrLayer3")]
+	public Sprite spPreviewB7;
 
 	[Button]
 	public void GenerateSprites()
 	{
 		showActions = false;
 		character.EnableCharacterScripts(false);
-		//existingCharacters.Clear();
-		//existingCharacters.Add("3,29,82,101,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
 		dirtyStartTime = Time.time;
 		spriteRasterizer.devUseCache = devUseCache;
 		spriteRasterizer.devSavePng = devSavePng;
 		spriteRasterizer.devSaveSharedItemsPng = devSaveSharedItemsPng;
 		spriteRasterizer.ClearSpriteCache();
-		Dictionary<string, Trait> randomTraits = GetRandomTraits();
-		string traitStr = GetTraitString(randomTraits);
-		//#spriteRasterizer.RasterizeAllFrames(randomTraits, Utils.GetSHA1Hash((XUtils.Timestamp()).ToString()), (sprites, hash) => { }, false);
-		spriteRasterizer.RasterizeAllFrames(randomTraits, Utils.GetSHA1Hash(traitStr), OnRasterizationComplete, false);
-	}
-	/*#
+
+#if DEBUG_TEST
+		if (!string.IsNullOrEmpty(DevDegen)) { //#(DevDegen != null && DevDegen.Length > 0) {
+			existingCharacters.Clear();
+			existingCharacters.Add(DevDegen);
+			Dictionary<string, Trait> traits = GetDevDegenTraits();
+		} else {
+			traits = GetRandomTraits();
+		}
+#else
+		Dictionary<string, Trait> traits = GetRandomTraits();
+#endif
+
+		string traitStr = GetTraitString(traits);
+		//#if (generateSprites) {
+		//#spriteRasterizer.RasterizeAllFrames(traits, Utils.GetSHA1Hash((XUtils.Timestamp()).ToString()), (sprites, hash) => { }, false);
+		spriteRasterizer.RasterizeAllFrames(traits, Utils.GetSHA1Hash(traitStr), OnRasterizationComplete, false);
+		//#}
+	}/*#
 	[Button]
 	public void GenerateSprites2()
 	{
@@ -1134,103 +1294,53 @@ public class CustomizationManager : MonoBehaviour
 			string traitStr = GetTraitString(randomTraits);
 			//#spriteRasterizer.RasterizeAllFrames(randomTraits, Utils.GetSHA1Hash((XUtils.Timestamp()).ToString()), (sprites, hash) => { }, false);
 			spriteRasterizer.RasterizeAllFrames(randomTraits, Utils.GetSHA1Hash(traitStr), OnRasterizationComplete, false);
-			//#print($"CustomizationManager.GetRandomTraits3: {i + 1} of {max} complete.");
+			//#print($"CustomizationManager.GenerateSprites2: {i + 1} of {max} complete.");
 		}
 	}
 	#*/
-	//#[Button, ShowIf("showActions")] public void Normal() { character.Normal(); }
-	//#[Button, ShowIf("showActions")] public void Attack() { ClearAllTraitLayerData(); character.Attack(); }
-	//#[Button, ShowIf("showActions")] public void Bounce() { character.Bounce(); }
-	//#[Button, ShowIf("showActions")] public void Special() { character.Special(); }
-	//#[Button, ShowIf("showActions")] public void Burp() { character.Burp(); }
-	//#[Button, ShowIf("showActions")] public void Pose() { character.Pose(); }
-	/*#
-	[Dropdown("DevTribes")]
-	public string DevTribe;
-	private List<string> DevTribes
-	{
-		get
-		{
-			return new List<string>() { "Random", "Ape", "Human", "Doge", "Frog", "Cat", "Alien" };
-		}
-	}
+	[Button, ShowIf("showActions")] public void Normal() { ClearAllTraitLayerData(); character.state = CharacterState.Posing; character.Normal(); }
+	[Button, ShowIf("showActions")] public void Attack() { ClearAllTraitLayerData(); character.state = CharacterState.Normal; character.Attack(); } //#ClearAllTraitLayerData();
+	//#[Button, ShowIf("showActions")] public void AttackDemo() { ClearAllTraitLayerData(); character.state = CharacterState.Normal;
+	//#	character.GetComponent<CharacterAnimator>().RunAttacksDemo(); } //#ClearAllTraitLayerData();
+	[Button, ShowIf("showActions")] public void Bounce() { ClearAllTraitLayerData(); character.state = CharacterState.Normal; character.Bounce(); }
+	//#[Button, ShowIf("showActions")] public void Special() { ClearAllTraitLayerData(); character.state = CharacterState.Normal; character.Special(); }
+	[Button, ShowIf("showActions")] public void Burp() { ClearAllTraitLayerData(); character.state = CharacterState.Normal; character.Burp(); }
+	[Button, ShowIf("showActions")] public void Pose() { ClearAllTraitLayerData(); character.state = CharacterState.Normal; character.Pose(); }
 	
 	[Dropdown("DevDegens")]
 	public string DevDegen;
-	private List<string> DevDegens
-	{
-		get {
-			return new List<string>() {
-				"Randomize", "Snarfy", "Andy", "Spike", "Morgan", "Bolo", "Will" //# Add more test degens as desired.
-			};
-		}
-	}
-
-	[Dropdown("DevDegens")]
-	public string DevDegen;
 	private DropdownList<string> DevDegens()
 	{
 		return new DropdownList<string>()
 		{
-			{ "Randomize", null },
-			{ "Snarfy", "DataTest_Snarfy" },
-			{ "Andy", "DataTest_Andy" },
-			{ "Spike", "DataTest_Spike" },
-			{ "Morgan", "DataTest_Morgan" },
-			{ "Bolo", "DataTest_Bolo" },
-			{ "Will", "DataTest_Will" }
+			{ "Randomize", "" },
+		//	{ "Snarfy", "3,29,82,101,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
+		//	{ "Snarfy2", "1,14,77,101,112,679,695,732,789,817,822,866,887,979,0,0,0,0,0,0,0,0" },
+		//	{ "Andy", "1,17,73,104,110,263,684,714,817,822,860,894,991,0,0,0,0,0,0,0,0,0" },
+		//	{ "Spike", "5,48,90,107,110,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
+		//	{ "Spike2", "4,38,104,110,384,622,792,834,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
+		//	{ "Morgan", "6,60,101,112,263,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
+		//	{ "Bolo", "1,10,70,101,110,439,619,684,695,727,942,0,0,0,0,0,0,0,0,0,0,0" },
+		//	{ "Will", "1,10,70,108,111,428,599,729,756,817,827,866,909,1011,0,0,0,0,0,0,0,0" }
+			{ "Snarfy", "3,29,82,101,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1200,1210,1220,1240" },
+			{ "Snarfy2", "1,14,77,101,112,0,0,0,0,0,0,0,679,695,732,789,0,817,822,866,887,979,1202,1210,1220,1240" },
+			{ "Andy", "1,17,73,104,110,0,263,0,0,0,0,0,684,0,714,0,0,817,822,860,894,991,1203,1210,1220,1240" },
+			{ "Spike", "5,48,90,107,110,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1201,1210,1220,1240" },
+			{ "Spike2", "4,38,0,104,110,0,0,0,384,0,0,622,0,0,0,792,0,0,834,0,0,0,1202,1210,1220,1240" },
+			{ "Morgan", "6,60,0,101,112,0,263,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1203,1210,1220,1240" },
+			{ "Bolo", "1,10,70,101,110,0,0,0,439,0,0,619,684,695,727,0,0,0,0,0,942,0,1200,1210,1220,1240" },
+			{ "Will", "1,10,70,108,111,0,0,0,428,0,0,599,0,0,729,756,0,817,827,866,909,1011,1201,1210,1220,1240" }
+		//	{ "Snarfy", "3,29,82,101" },
+		//	{ "Snarfy2", "1,14,77,101,112,679,695,732,789,817,822,866,887,979" },
+		//	{ "Andy", "1,17,73,104,110,263,684,714,817,822,860,894,991" },
+		//	{ "Spike", "5,48,90,107,110" },
+		//	{ "Spike2", "4,38,104,110,384,622,792,834" },
+		//	{ "Morgan", "6,60,101,112,263" },
+		//	{ "Bolo", "1,10,70,101,110,439,619,684,695,727,942" },
+		//	{ "Will", "1,10,70,108,111,428,599,729,756,817,827,866,909,1011" }
 		};
 	}
-	/*#
-	[Dropdown("DevDegens")]
-	public string DevDegen;
-	private DropdownList<string> DevDegens()
-	{
-		return new DropdownList<string>()
-		{
-			{ "Randomize", null },
-			{ "Snarfy", "3,29,82,101,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-			{ "Snarfy2", "1,14,77,101,112,679,695,732,789,817,822,866,887,979,0,0,0,0,0,0,0,0" },
-			{ "Andy", "1,17,73,104,110,263,684,714,817,822,860,894,991,0,0,0,0,0,0,0,0,0" },
-			{ "Spike", "5,48,90,107,110,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-			{ "Spike2", "4,38,104,110,384,622,792,834,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-			{ "Morgan", "6,60,101,112,263,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-			{ "Bolo", "1,10,70,101,110,439,619,684,695,727,942,0,0,0,0,0,0,0,0,0,0,0" },
-			{ "Will", "1,10,70,108,111,428,599,729,756,817,827,866,909,1011,0,0,0,0,0,0,0,0" }
-		};
 
-		//return new DropdownList<string>()
-		//{
-		//	{ "Randomize", null },
-		//	{ "Snarfy", "101,82,29,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-		//	{ "Snarfy2", "695,101,789,679,77,822,732,887,866,112,979,14,1,817,0,0,0,0,0,0,0,0" },
-		//	{ "Andy", "104,684,73,822,714,894,263,860,110,991,17,1,817,0,0,0,0,0,0,0,0,0" },
-		//	{ "Spike", "107,90,110,48,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-		//	{ "Spike2", "622,104,792,834,110,38,384,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-		//	{ "Morgan", "101,263,112,60,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" },
-		//	{ "Bolo", "695,619,101,684,70,727,942,439,110,10,1,0,0,0,0,0,0,0,0,0,0,0" },
-		//	{ "Will", "599,108,756,70,827,729,909,866,111,1011,10,428,1,817,0,0,0,0,0,0,0,0" }
-		//};
-	}
-	#*//*#
-	[ReorderableList]
-	[Tooltip("This is the list of layers above the 'bat above'.")]
-	public string[] LayersAbove_BatAbove = new string[] {
-		"1", "2", "3", "4", "5"
-	};
-
-	[ReorderableList]
-	[Tooltip("This is the list of layers below the 'bat above'.")]
-	public string[] LayersBelow_BatAbove = new string[] {
-		"6", "7", "8", "9", "10"
-	};
-
-	[ReorderableList]
-	[Tooltip("This is the list of layers below the 'bat below'.")]
-	public string[] LayersBelow_BatBelow = new string[] {
-		"11", "12", "13", "14", "15"
-	};
-	#*/
 	public void StartTest()
 	{
 		character.enabled = true;
@@ -1434,5 +1544,10 @@ private void OnGetCharactersResponse(List<int[]> characterTraits)
 		public const string Neckwear = "Neckwear";
 		public const string LeftItem = "Left Item";
 		public const string RightItem = "Right Item";
+		public const string Wearables = "Wearables"; //#
+		public const string Bat = "Bat"; //#
+		public const string Cape = "Cape"; //#
+		public const string Companion = "Companion"; //#
+		public const string Halo = "Halo"; //#
 	}
 }

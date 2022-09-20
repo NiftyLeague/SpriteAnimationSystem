@@ -19,7 +19,10 @@ public class SoundController : MonoBehaviour
 
 	public static void PlaySoundEffect(string soundEffectName)
 	{
-		PlaySoundEffect(instance.globalSounds, soundEffectName);
+		if (instance != null)
+		{
+			PlaySoundEffect(instance.globalSounds, soundEffectName);
+		}
 	}
 
 	public static void PlaySoundEffect(SoundHolder soundHolder, string soundEffectName)

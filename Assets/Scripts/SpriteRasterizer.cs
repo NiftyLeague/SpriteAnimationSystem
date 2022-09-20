@@ -145,6 +145,7 @@ public class SpriteRasterizer : MonoBehaviour
 			return;
 		}
 		renderCamera.enabled = true;
+
 #if DEBUG_TEST //# ----------
 		bool useCache = devUseCache; // false;
 		bool savePng = devSavePng; // true;
@@ -156,6 +157,7 @@ public class SpriteRasterizer : MonoBehaviour
 		bool useCache = true;
 		bool savePng = false;
 #endif
+
 		jobs.Enqueue(new RasterizationJob(traits, traitHash, OnRasterizationJobComplete, onRasterizationComplete, useCache, savePng, isImportant));
 	}
 
@@ -211,9 +213,13 @@ public class SpriteRasterizer : MonoBehaviour
 			}
 			spriteCache.Add(res.hash, res);
 		}
+#if DEBUG_TEST
+		I.cc.TestAllLayerData("SpriteRasterizer.OnRasterizationJobComplete 0.1: "); //#
+#endif
 		job.callback(job.result, job.hash);
 
 #if DEBUG_TEST //# ----------
+		I.cc.TestAllLayerData("SpriteRasterizer.OnRasterizationJobComplete 0.2: "); //#
 		if (testMaxCount > 0)
 		{
 			testCounter++;
@@ -312,9 +318,17 @@ public class SpriteRasterizer : MonoBehaviour
 
 		public void Finish()
 		{
-			bool success = string.IsNullOrEmpty(error) && result.Count == AnimationTags.totalFrameCount;
+			//#bool success = string.IsNullOrEmpty(error) && result.Count == AnimationTags.totalFrameCount;
+			int maxCount = CustomizationManager.I.character.GetComponent<CharacterAnimator>().rends.Count; //#
+			bool success = string.IsNullOrEmpty(error) && result.Count == AnimationTags.totalFrameCount * maxCount; //#
 			state = success ? State.Succeeded : State.Failed;
+#if DEBUG_TEST
+			//##I.cc.TestAllLayerData("SpriteRasterizer.Rasterize 0.1: "); //#
+#endif
 			onComplete(this);
+#if DEBUG_TEST
+			//##I.cc.TestAllLayerData("SpriteRasterizer.Rasterize 0.2: "); //#
+#endif
 			CustomizationManager.I.ClearAllTraitLayerData();
 		}
 
@@ -388,6 +402,7 @@ public class SpriteRasterizer : MonoBehaviour
 
 			//# -----
 
+			I.cc.layersRoot.gameObject.SetActive(true); //##
 			for (int i = 0; i < AnimationTags.totalFrameCount; i++)
 			{
 				RasterizeFrame(i);
@@ -396,8 +411,15 @@ public class SpriteRasterizer : MonoBehaviour
 					yield return new WaitForEndOfFrame();
 				}
 			}
-			I.cc.SetFrameAbsolute(0); //# TEMP
+			I.cc.layersRoot.gameObject.SetActive(false); //##
+			I.cc.SetFrameAbsolute(AnimationTags.Empty.frameFrom); //#.totalFrameCount - 1); //# TEMP
+#if DEBUG_TEST
+			//#I.cc.TestAllLayerData("Rasterize 0"); //#
+#endif
 			Finish();
+#if DEBUG_TEST
+			//#I.cc.TestAllLayerData("Rasterize 1"); //#
+#endif
 
 			//# -----
 
@@ -426,6 +448,9 @@ public class SpriteRasterizer : MonoBehaviour
 
 		private void RasterizeFrame(int frame)
 		{
+#if DEBUG_TEST
+			//#I.cc.TestAllLayerData(); //#
+#endif
 			/*#
 			I.cc.SetFrameAbsolute(frame);
 			Texture2D tex = I.CaptureTexture2D(true);
@@ -441,6 +466,7 @@ public class SpriteRasterizer : MonoBehaviour
 				SavePng(tex, $"{frame:0000}.png", false, frame == 0); //# % 10
 			}
 			#*/
+			//#I.cc.layersRoot.gameObject.SetActive(true); //##
 			I.cc.SetFrameAbsolute(frame);
 
 			// Set the number of blended layers.
@@ -461,10 +487,24 @@ public class SpriteRasterizer : MonoBehaviour
 			}
 
 			// ----------
+
+			//charLayer0.sprite = spriteList[0]; //# TODO: Change to dictionary
+			//batLayer0.sprite = spriteList[1];
+			//charLayer1.sprite = spriteList[2];
+			//capeLayer0.sprite = spriteList[3];
+			//batLayer1.sprite = spriteList[4];
+			//charLayer2.sprite = spriteList[5];
+			//capeLayer1.sprite = spriteList[6];
+			//charLayer3.sprite = spriteList[7];
+			//haloLayer0.sprite = spriteList[8];
+
+			// ----------
 			// Layers above bat_above. These are the top-most layers.
 			// Turn on the layers that are above bat_above and rasterize as a blended layer.
 
-			string str = "";
+			string str = "",
+				strPresent = "<color=#66FF66>*</color>", //#662200 //#"1",
+				strAbsent = "<color=#FFCC00>*</color>"; //#666666 //#"0";
 			bool conditionMet = false;
 			int iAtLayer = 0;
 			for (i = 0; i < numLayers; i++)
@@ -476,7 +516,7 @@ public class SpriteRasterizer : MonoBehaviour
 				}
 				// If the condition is not yet met, then show the layer.
 				I.cc.layers[i].transform.gameObject.SetActive(!conditionMet);
-				str += !conditionMet ? "1" : "0";
+				str += !conditionMet ? strPresent : strAbsent;
 			}
 			str += $" chrLayer0 (iAtLayer: {iAtLayer})\n";
 			RasterizeBlendedFrame(frame, "chrLayer0");
@@ -490,55 +530,97 @@ public class SpriteRasterizer : MonoBehaviour
 			{
 				conditionMet = i == iAtLayer;
 				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
-				str += conditionMet ? "1" : "0";
+				str += conditionMet ? strPresent : strAbsent;
 			}
 			str += " batLayer0\n";
 			RasterizeBlendedFrame(frame, "batLayer0", true); // This is a shared item.
 
 			// ----------
-			// Layers above bat_below. These are the layers between bat_above and bat_below.
-			// Turn on the layers that are above bat_below and rasterize as a blended layer.
+			// Layers above cape_above. These are the layers between bat_above and cape_above.
+			// Turn on the layers that are above cape_above and rasterize as a blended layer.
 
 			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(false);
 			iAtLayer++;
 			for (i = 0; i < iAtLayer; i++)
 			{
 				I.cc.layers[i].transform.gameObject.SetActive(false);
-				str += "0";
+				str += strAbsent;
 			}
 
 			conditionMet = false;
 			for (i = iAtLayer; i < numLayers; i++)
 			{
-				if (I.cc.layers[i].layerVariation.animationLayer.layerType == AnimationLayerType.Bat)
+				if (!conditionMet && I.cc.layers[i].layerVariation.animationLayer.layerType == AnimationLayerType.Cape)
 				{
 					conditionMet = true;
 					iAtLayer = i;
 				}
 				// If the condition is not yet met, then show the layer.
 				I.cc.layers[i].transform.gameObject.SetActive(!conditionMet);
-				str += !conditionMet ? "1" : "0";
+				str += !conditionMet ? strPresent : strAbsent;
 			}
 			str += $" chrLayer1 (iAtLayer: {iAtLayer})\n";
 			RasterizeBlendedFrame(frame, "chrLayer1");
 
 			// ----------
-			// Bat_below.
-			// Turn on the bat_below layer and rasterize.
+			// Cape_above.
+			// Turn on the cape_above layer and rasterize.
 
 			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(true);
 			for (i = 0; i < numLayers; i++)
 			{
 				conditionMet = i == iAtLayer;
 				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
-				str += conditionMet ? "1" : "0";
+				str += conditionMet ? strPresent : strAbsent;
+			}
+			str += " capeLayer0\n";
+			RasterizeBlendedFrame(frame, "capeLayer0", true); // This is a shared item.
+
+			// ----------
+			// Bat_below.
+			// Turn on the bat_below layer and rasterize.
+
+			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(true);
+			iAtLayer++;
+			for (i = 0; i < numLayers; i++)
+			{
+				conditionMet = i == iAtLayer;
+				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
+				str += conditionMet ? strPresent : strAbsent;
 			}
 			str += " batLayer1\n";
 			RasterizeBlendedFrame(frame, "batLayer1", true); // This is a shared item.
 
 			// ----------
-			// Layers below bat_below. These are the bottom-most layers.
-			// Turn on the layers that are above bat_below and rasterize as blended layer.
+			// Layers below bat_below. These are the layers between bat_below and cape_above.
+			// Turn on the layers that are between bat_below and cape_above and rasterize as blended layer.
+
+			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(false);
+			iAtLayer++;
+			for (i = 0; i < iAtLayer; i++)
+			{
+				I.cc.layers[i].transform.gameObject.SetActive(false);
+				str += strAbsent;
+			}
+
+			conditionMet = false;
+			for (i = iAtLayer; i < numLayers; i++)
+			{
+				if (!conditionMet && I.cc.layers[i].layerVariation.animationLayer.layerType == AnimationLayerType.Cape)
+				{
+					conditionMet = true;
+					iAtLayer = i;
+				}
+				// If the condition is not yet met, then show the layer.
+				I.cc.layers[i].transform.gameObject.SetActive(!conditionMet);
+				str += !conditionMet ? strPresent : strAbsent;
+			}
+			str += $" chrLayer2 (iAtLayer: {iAtLayer})\n";
+			RasterizeBlendedFrame(frame, "chrLayer2");
+			/*#
+			// ----------
+			// Layers below bat_below. These are the layers between bat_below and cape_above.
+			// Turn on the layers that are between bat_below and cape_above and rasterize as blended layer.
 
 			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(false);
 			iAtLayer++;
@@ -546,13 +628,46 @@ public class SpriteRasterizer : MonoBehaviour
 			{
 				conditionMet = i >= iAtLayer;
 				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
-				str += conditionMet ? "1" : "0";
+				str += conditionMet ? strPresent : strAbsent;
 			}
 			str += " chrLayer2";
 			RasterizeBlendedFrame(frame, "chrLayer2");
+			#*/
+			// ----------
+			// Cape_below.
+			// Turn on the cape_below layer and rasterize.
 
+			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(true);
+			for (i = 0; i < numLayers; i++)
+			{
+				conditionMet = i == iAtLayer;
+				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
+				str += conditionMet ? strPresent : strAbsent;
+			}
+			str += " capeLayer1\n";
+			RasterizeBlendedFrame(frame, "capeLayer1", true); // This is a shared item.
+
+			// ----------
+			// Layers below cape_below. These are the bottom-most layers, except for the halo, still in progress.
+			// Turn on the layers that are below bat_below and rasterize as blended layer.
+
+			//I.cc.layers[iAtLayer].transform.gameObject.SetActive(false);
+			iAtLayer++;
+			for (i = 0; i < numLayers; i++)
+			{
+				conditionMet = i >= iAtLayer;
+				I.cc.layers[i].transform.gameObject.SetActive(conditionMet);
+				str += conditionMet ? strPresent : strAbsent;
+			}
+			str += " chrLayer3";
+			RasterizeBlendedFrame(frame, "chrLayer3");
+
+			// ----------
+			//RasterizeBlendedFrame(frame, "haloLayer0");
+
+			// ----------
 			if (frame == 1) // || frame == 27
-				print(frame + "\n" + str);
+				print($"SpriteRasterizer.RasterizeFrame({frame})\n{str}");
 
 			// ----------
 			// Reset the active states for all layers.
@@ -561,8 +676,9 @@ public class SpriteRasterizer : MonoBehaviour
 			{
 				//I.cc.layers[i].transform.gameObject.SetActive(activeStates[i]);
 				//I.cc.layers[i].layerVariation.gameObject.SetActive(activeStates[i]);
-				I.cc.layers[i].layerVariation.gameObject.SetActive(true);
+				I.cc.layers[i].layerVariation.gameObject.SetActive(false);
 			}
+			//#I.cc.layersRoot.gameObject.SetActive(false); //##
 
 			//# NOTE: FORMAT MAY CHANGE -----
 
@@ -572,6 +688,9 @@ public class SpriteRasterizer : MonoBehaviour
 		{
 			Texture2D tex = I.CaptureTexture2D(true);
 			result.Add(I.CreateSprite(tex, $"{frame:000}_{hash}"));
+#if DEBUG_TEST
+			if (!CustomizationManager.I.generateSprites) return;
+#endif
 			if (useCache)
 			{
 				byte[] raw = tex.GetRawTextureData();
@@ -581,6 +700,7 @@ public class SpriteRasterizer : MonoBehaviour
 			{
 				//# Accommodate devSaveSharedItemsPng
 				//SavePng(tex, $"{frame:0000}.png", isSharedItem, frame == 0); //# % 10
+				if (!isSharedItem || !label.Contains("cape")) //##
 				SavePng(tex, $"{frame:0000}_{label}.png", isSharedItem, frame == 0); //# % 10
 			}
 
@@ -594,7 +714,8 @@ public class SpriteRasterizer : MonoBehaviour
 			byte[] bytes = null;
 			try
 			{
-				string path = Path.Combine(cachePath, "924b13710494f70eb2f65432ee81554880023bdd33"); // fileName);
+				string path = Path.Combine(cachePath, fileName);
+				//#string path = Path.Combine(cachePath, "924b13710494f70eb2f65432ee81554880023bdd33"); // fileName);
 				bytes = XUtils.LoadBytes(path, true);
 			}
 			catch

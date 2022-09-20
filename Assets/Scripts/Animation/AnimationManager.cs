@@ -82,7 +82,6 @@ public class AnimationManager : MonoBehaviour
 		}
 	}
 
-
 	public static IEnumerator CleanupUnusedFrames()
 	{
 		foreach (AnimationLayer l in I.layers)
@@ -112,6 +111,12 @@ public class AnimationManager : MonoBehaviour
 			return AnimationLayerType.Bat;
 		case "b":
 			return AnimationLayerType.Body;
+		case "cape":
+			return AnimationLayerType.Cape;
+		case "companion":
+			return AnimationLayerType.Companion;
+		case "halo":
+			return AnimationLayerType.Halo;
 		case "fx":
 			return AnimationLayerType.FX;
 		case "~":
@@ -179,13 +184,18 @@ public class AnimationManager : MonoBehaviour
 }
 
 
+// Animation layer types include body, accessory, and wearable items, and also composite layers.
+
 public enum AnimationLayerType
 {
 	Accessory,
 	Bat,
 	Body,
-	FX,
+	Cape, //#
+	Companion, //#
 	Composite, //#
+	FX,
+	Halo, //#
 }
 
 

@@ -14,7 +14,7 @@ public class EffectsController : MonoBehaviour
 
 	static EffectsController instance;
 
-	public KnockedUpEffect knockedUpEffect;
+	public KnockedUpwardEffect knockedUpwardEffect;
 
 	public GameObject tongueHitEffect;
 
@@ -375,9 +375,9 @@ public class EffectsController : MonoBehaviour
 			traile.transform.localPosition = traile.transform.localPosition + (Vector3)Random.insideUnitCircle * 0.25f;
 	}
 
-	internal static void CreateKnockedUpEffect(CharacterAnimator characterAnimator)
+	internal static void CreateKnockedUpwardEffect(CharacterAnimator characterAnimator)
 	{
-		var kue = Instantiate(instance.knockedUpEffect, characterAnimator.transform.position - Vector3.forward * 5f, Quaternion.identity) as KnockedUpEffect;
+		var kue = Instantiate(instance.knockedUpwardEffect, characterAnimator.transform.position - Vector3.forward * 5f, Quaternion.identity) as KnockedUpwardEffect;
 		kue.Initialize(characterAnimator);
 	}
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KnockedUpEffect : MonoBehaviour
+public class KnockedUpwardEffect : MonoBehaviour
 {
 	public SimpleAnim anim;
 	public float rotSpeed, fallSpeed;
@@ -42,9 +42,12 @@ public class KnockedUpEffect : MonoBehaviour
 
 	internal void Initialize(CharacterAnimator characterAnimator)
 	{
+		//# TODO: Update
+
 		anim.frames = new Sprite[] {
-			characterAnimator.GetFrame(AnimationTagType.Impact, 0),
-			characterAnimator.GetFrame(AnimationTagType.Impact, 1)
+		//#anim.frames = new List<Sprite>[] {
+			characterAnimator.GetFrame(AnimationTagType.Impact, 0)[0],
+			characterAnimator.GetFrame(AnimationTagType.Impact, 1)[0]
 		};
 		anim.transform.localScale = Vector3.one * 2.5f;
 	}

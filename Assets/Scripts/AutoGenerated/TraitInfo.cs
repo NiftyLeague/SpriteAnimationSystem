@@ -7,14 +7,17 @@ public static class TraitInfo
 {
 	public static readonly Trait EmptyTrait = new Trait(0, "Empty");
 
+	#region traits
 	public static readonly Dictionary<int, Trait> traits = new Dictionary<int, Trait>() {
 		{ 0,  EmptyTrait },
+		#region character
 		{ 1, new Trait(1, "Ape") },
 		{ 2, new Trait(2, "Human") },
 		{ 3, new Trait(3, "Doge") },
 		{ 4, new Trait(4, "Frog") },
 		{ 5, new Trait(5, "Cat") },
 		{ 6, new Trait(6, "Alien") },
+		//#{ 7, new Trait(6, "Seventh") },
 		{ 10, new Trait(10, "Single Origin Ape") },
 		{ 11, new Trait(11, "Toledo Ape") },
 		{ 12, new Trait(12, "Latin Charm Ape") },
@@ -237,6 +240,8 @@ public static class TraitInfo
 		{ 260, new Trait(260, "Straight 07") },
 		{ 261, new Trait(261, "Straight 08") },
 		{ 262, new Trait(262, "Straight 09") },
+		#endregion character
+		#region accessories
 		{ 263, new Trait(263, "Cigarette 01") },
 		{ 264, new Trait(264, "Cigarette 02") },
 		{ 265, new Trait(265, "Cigarette 03") },
@@ -998,8 +1003,34 @@ public static class TraitInfo
 		{ 1021, new Trait(1021, "Right Item Umbrella 04") },
 		{ 1022, new Trait(1022, "Right Item Vanilla Icecream") },
 		{ 1023, new Trait(1023, "Right Item Wand") },
+		#endregion accessories
+		#region wearables
+		{ 1200, new Trait(1200, "Bat 01") },
+		{ 1201, new Trait(1201, "Bat Bread") },
+		{ 1202, new Trait(1202, "Bat Diamond") },
+		{ 1203, new Trait(1203, "Bat Purple") },
+		{ 1210, new Trait(1210, "Cape 01") },
+		{ 1220, new Trait(1220, "Companion Bot 01") },
+		//#{ 1221, new Trait(1221, "Companion Dummy Alien") },
+		//#{ 1222, new Trait(1222, "Companion Dummy Ape") },
+		//#{ 1223, new Trait(1223, "Companion Dummy Cat") },
+		//#{ 1224, new Trait(1224, "Companion Dummy Doge") },
+		//#{ 1225, new Trait(1225, "Companion Dummy Frog") },
+		//#{ 1226, new Trait(1226, "Companion Dummy Human") },
+		//#{ 1227, new Trait(1227, "Companion Dummy Seventh") },
+		//#{ 1228, new Trait(1228, "Companion Mini Alien") },
+		//#{ 1229, new Trait(1229, "Companion Mini Ape") },
+		//#{ 1230, new Trait(1230, "Companion Mini Cat") },
+		//#{ 1231, new Trait(1231, "Companion Mini Doge") },
+		//#{ 1232, new Trait(1232, "Companion Mini Frog") },
+		//#{ 1233, new Trait(1233, "Companion Mini Human") },
+		//#{ 1234, new Trait(1234, "Companion Mini Seventh") },
+		{ 1240, new Trait(1240, "Halo 01") },
+		#endregion wearables
 	};
+	#endregion traits
 
+	#region accessoryTraits
 	public static readonly Dictionary<AccessoryType, Dictionary<int, Trait>> accessoryTraits = new Dictionary<AccessoryType, Dictionary<int, Trait>>
 	{
 		{ AccessoryType.Hair, new Dictionary<int, Trait>() {
@@ -1911,7 +1942,9 @@ public static class TraitInfo
 			{ 1023, new Trait(1023, "Right Item Wand") },
 		} },
 	};
+	#endregion accessoryTraits
 
+	#region accessoryTraitNameMap
 	public static readonly Dictionary<AccessoryType, Dictionary<string, int>> accessoryTraitNameMap = new Dictionary<AccessoryType, Dictionary<string, int>>
 	{
 		{ AccessoryType.Hair, new Dictionary<string, int>() {
@@ -2823,7 +2856,79 @@ public static class TraitInfo
 			{ "Right Item Wand", 1023 },
 		} },
 	};
+	#endregion accessoryTraitNameMap
 
+	#region wearableTraits
+	public static readonly Dictionary<WearableType, Dictionary<int, Trait>> wearableTraits = new Dictionary<WearableType, Dictionary<int, Trait>>
+	{
+		{ WearableType.Bat, new Dictionary<int, Trait>() {
+			{ 1200, new Trait(1200, "Bat 01") },
+			{ 1201, new Trait(1201, "Bat Bread") },
+			{ 1202, new Trait(1202, "Bat Diamond") },
+			{ 1203, new Trait(1203, "Bat Purple") },
+		} },
+		{ WearableType.Cape, new Dictionary<int, Trait>() {
+			{ 1210, new Trait(1210, "Cape 01") },
+		} },
+		{ WearableType.Companion, new Dictionary<int, Trait>() {
+			{ 1220, new Trait(1220, "Companion Bot 01") },
+			//#{ 1221, new Trait(1221, "Companion Dummy Alien") },
+			//#{ 1222, new Trait(1222, "Companion Dummy Ape") },
+			//#{ 1223, new Trait(1223, "Companion Dummy Cat") },
+			//#{ 1224, new Trait(1224, "Companion Dummy Doge") },
+			//#{ 1225, new Trait(1225, "Companion Dummy Frog") },
+			//#{ 1226, new Trait(1226, "Companion Dummy Human") },
+			//#{ 1227, new Trait(1227, "Companion Dummy Seventh") },
+			//#{ 1228, new Trait(1228, "Companion Mini Alien") },
+			//#{ 1229, new Trait(1229, "Companion Mini Ape") },
+			//#{ 1230, new Trait(1230, "Companion Mini Cat") },
+			//#{ 1231, new Trait(1231, "Companion Mini Doge") },
+			//#{ 1232, new Trait(1232, "Companion Mini Frog") },
+			//#{ 1233, new Trait(1233, "Companion Mini Human") },
+			//#{ 1234, new Trait(1234, "Companion Mini Seventh") },
+		} },
+		{ WearableType.Halo, new Dictionary<int, Trait>() {
+			{ 1240, new Trait(1240, "Halo 01") },
+		} },
+	};
+	#endregion wearableTraits
+
+	#region wearableTraitNameMap
+	public static readonly Dictionary<WearableType, Dictionary<string, int>> wearableTraitNameMap = new Dictionary<WearableType, Dictionary<string, int>>
+	{
+		{ WearableType.Bat, new Dictionary<string, int>() {
+			{ "Bat 01", 1200 },
+			{ "Bat Bread", 1201 },
+			{ "Bat Diamond", 1202 },
+			{ "Bat Purple", 1203 },
+		} },
+		{ WearableType.Cape, new Dictionary<string, int>() {
+			{ "Cape 01", 1210 },
+		} },
+		{ WearableType.Companion, new Dictionary<string, int>() {
+			{ "Companion Bot 01", 1220 },
+			//#{ "Companion Dummy Alien", 1221 },
+			//#{ "Companion Dummy Ape", 1222 },
+			//#{ "Companion Dummy Cat", 1223 },
+			//#{ "Companion Dummy Doge", 1224 },
+			//#{ "Companion Dummy Frog", 1225 },
+			//#{ "Companion Dummy Human", 1226 },
+			//#{ "Companion Dummy Seventh", 1227 },
+			//#{ "Companion Mini Alien", 1228 },
+			//#{ "Companion Mini Ape", 1229 },
+			//#{ "Companion Mini Cat", 1230 },
+			//#{ "Companion Mini Doge", 1231 },
+			//#{ "Companion Mini Frog", 1232 },
+			//#{ "Companion Mini Human", 1233 },
+			//#{ "Companion Mini Seventh", 1234 },
+		} },
+		{ WearableType.Halo, new Dictionary<string, int>() {
+			{ "Halo 01", 1240 },
+		} },
+	};
+	#endregion wearableTraitNameMap
+
+	#region characterTraits
 	public static readonly Dictionary<CharacterType, Dictionary<int, Trait>> characterTraits = new Dictionary<CharacterType, Dictionary<int, Trait>>
 	{
 		{ CharacterType.Ape, new Dictionary<int, Trait>() {
@@ -8287,8 +8392,11 @@ public static class TraitInfo
 			{ 1022, new Trait(1022, "Right Item Vanilla Icecream") },
 			{ 1023, new Trait(1023, "Right Item Wand") },
 		} },
+		//#CharacterType.Seventh
 	};
+	#endregion characterTraits
 
+	#region characterTraitNameMap
 	public static readonly Dictionary<CharacterType, Dictionary<string, int>> characterTraitNameMap = new Dictionary<CharacterType, Dictionary<string, int>>
 	{
 		{ CharacterType.Ape, new Dictionary<string, int>() {
@@ -13752,8 +13860,11 @@ public static class TraitInfo
 			{ "Right Item Vanilla Icecream", 1022 },
 			{ "Right Item Wand", 1023 },
 		} },
+		//#CharacterType.Seventh
 	};
+	#endregion characterTraitNameMap
 
+	#region traitGetters
 	public static Trait GetTrait(CharacterType characterType, string name)
 	{
 		try
@@ -13793,6 +13904,20 @@ public static class TraitInfo
 		return EmptyTrait;
 	}
 
+	public static Trait GetRandomTrait(CharacterType characterType, WearableType wearableType, HashSet<Trait> removedTraits)
+	{
+		//# Customize for multiple layers.
+		//#int[] characterTraits = characterTraitNameMap[characterType].Values.ToArray();
+		int[] wearableTraits = wearableTraitNameMap[wearableType].Values.ToArray();
+		//#int[] intersection = wearableTraits.Intersect(characterTraits).ToArray();
+		int randomTraitId = XRandom.NextMember(wearableTraits);
+		if (randomTraitId > 0 && !removedTraits.Any(t => t.id == randomTraitId))
+		{
+			return traits[randomTraitId];
+		}
+		return EmptyTrait;
+	}
+
 	public static Trait GetRandomTrait(CharacterType characterType, string nonAccessoryTraitName, HashSet<Trait> removedTraits)
 	{
 		string characterTypeName = AnimationManager.GetCharacterString(characterType);
@@ -13819,6 +13944,7 @@ public static class TraitInfo
 		traitPool = traitPool.Where(e => !removedTraits.Contains(e.Value)).ToArray();
 		return XRandom.NextMember(traitPool).Value;
 	}
+	#endregion traitGetters
 }
 
 [System.Serializable]

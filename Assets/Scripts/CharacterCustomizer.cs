@@ -233,7 +233,17 @@ public class CharacterCustomizer : MonoBehaviour
 		}
 		return null;
 	}
-
+	/*#
+	public WearableOptionEnumrator.WearableOption GetCurrentWearableOption(AnimationLayerVariation[] variations)
+	{
+		CustomizationLayer cl = layers.FirstOrDefault(l => Array.Exists(variations, v => v == l.layerVariation));
+		if (cl)
+		{
+			return new WearableOptionEnumrator.WearableOption(cl.layerVariation, cl.currentColorVariationIndex);
+		}
+		return null;
+	}
+	#*/
 	public AnimationLayerVariation.ColorVariationInfo GetCurrentEyeColorInfo(int index)
 	{
 		foreach (CustomizationLayer cl in layers)
@@ -329,9 +339,8 @@ public class CharacterCustomizer : MonoBehaviour
 	public void ClearLayers()
 	{
 		foreach (var l in layers)
-		{
 			DestroyImmediate(l.gameObject);
-		}
+
 		layers = new CustomizationLayer[0];
 
 		int max = 100;
@@ -344,47 +353,55 @@ public class CharacterCustomizer : MonoBehaviour
 	public void RunFrame(AnimationTagType tag, int frame, bool clamp)
 	{
 		int frameCount = AnimationTags.tags[tag].frameCount;
+
 		if (clamp)
-		{
 			SetFrame(tag, Mathf.Clamp(frame, 0, frameCount - 1));
-		}
 		else
-		{
 			SetFrame(tag, frame % frameCount);
-		}
 	}
 
 	public void PreoadAllLayerData()
 	{
 		if (layers == null || layers.Length == 0)
-		{
 			return;
-		}
+
 		foreach (var l in layers)
-		{
 			l.layerVariation.LoadLayerData();
-		}
 	}
 
 	public bool AllLayerDataPreloaded() //# was AllLayerDataPerloaded
 	{
 		if (layers == null || layers.Length == 0)
-		{
 			return false;
-		}
+
 		return layers.All(l => l.layerVariation.layerDataLoaded);
 	}
 
 	public void ClearAllLayerData()
 	{
 		if (layers == null || layers.Length == 0)
-		{
 			return;
-		}
+
 		foreach (var l in layers)
 		{
+			//#if (l.layerVariation.animationLayer.layerType == AnimationLayerType.Bat) //#
+			//#	print($"CharacterCustomizer.ClearAllLayerData: [{l.layerVariation.name}]"); //##
 			l.layerVariation.ClearLayerData();
+			//#if (l.layerVariation.animationLayer.layerType == AnimationLayerType.Bat) //#
+			//#	print($"2CharacterCustomizer.ClearAllLayerData: [{l.layerVariation.name}]"); //##
 		}
 		Resources.UnloadUnusedAssets();
+	}
+
+	public void TestAllLayerData(string str = "")
+	{
+		if (layers == null || layers.Length == 0)
+			return;
+
+		foreach (var l in layers)
+		{
+			if (l.layerVariation.animationLayer.layerType == AnimationLayerType.Bat) //#
+				print($"CharacterCustomizer.TestLayerData: {str}[{l.layerVariation.name}]"); //##
+		}
 	}
 }

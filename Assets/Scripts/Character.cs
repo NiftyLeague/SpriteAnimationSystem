@@ -664,7 +664,7 @@ public class Character : MonoBehaviour
 		}
 		if (transform.position.y > Terrain.TopKillPoint)
 		{
-			EffectsController.CreateKnockedUpEffect(GetComponent<CharacterAnimator>()); // TODO: Consider changing the name of this effect here and elsewhere.
+			EffectsController.CreateKnockedUpwardEffect(GetComponent<CharacterAnimator>());
 			if (player != null)
 				player.SetSpawnDelay(3f);
 
@@ -744,7 +744,7 @@ public class Character : MonoBehaviour
 		else#*/
 		if (attackState == AttackState.Attacking)
 		{
-			attackTimeLeft -= t;
+			//##attackTimeLeft -= t;
 			if (attackTimeLeft <= 0f)
 			{
 				RaycastHit2D[] hits;
@@ -2246,7 +2246,6 @@ public class Character : MonoBehaviour
 			boxCollider.offset = new Vector2(boxCollider.offset.x, boxColliderSize.y / 2f);
 		}
 	}
-
 
 	void StartSpecialAttack()
 	{

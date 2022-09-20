@@ -134,6 +134,7 @@ public class NiftyDegen
 	public Color32 primaryColor { get; }
 
 	public List<Sprite> sprites;
+	public Dictionary<string, List<Sprite>> layers; //#
 	public string hash { get; private set; }
 	public CharacterType type { get; }
 	public string traitsStr { get; }
@@ -150,7 +151,17 @@ public class NiftyDegen
 	}
 
 	public NiftyDegen(string traitsStr, bool isRental) : this(traitsStr.Split('.').Select(s => int.Parse(s)).ToArray(), isRental) { }
-
+	/*#
+	public Dictionary<string, Trait> ValidateTraits(int[] traits)
+	{
+		Dictionary<string, Trait> traitDict = new Dictionary<string, Trait>();
+		for (int i = 0; i < traitKeys.Length; i++)
+		{
+			traitDict.Add(traitKeys[i], traits[i] != TraitInfo.EmptyTrait.id ? TraitInfo.traits[traits[i]] : TraitInfo.EmptyTrait);
+		}
+		return traitDict;
+	}
+	#*/
 	public void Rasterize(bool isImportant, Action<NiftyDegen> onRasterizationComplete = null)
 	{
 		if (sprites == null || sprites.Count == 0 || sprites.Count != AnimationTags.totalFrameCount || sprites[0] == null)

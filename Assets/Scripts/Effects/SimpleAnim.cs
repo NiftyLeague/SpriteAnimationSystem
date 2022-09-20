@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class SimpleAnim : MonoBehaviour
 {
 	public float animSpeed;
 	public Sprite[] frames;
+	//#public List<Sprite>[] frames;
 
 	public bool playOnce;
 	public bool disableAfterPlayOnce = false;
@@ -51,6 +53,7 @@ public class SimpleAnim : MonoBehaviour
 	}
 
 	public void Play(Sprite[] frames, bool playOnce)
+	//#public void Play(List<Sprite>[] frames, bool playOnce)
 	{
 		this.frames = frames;
 		this.playOnce = playOnce;
@@ -96,6 +99,7 @@ public class SimpleAnim : MonoBehaviour
 	}
 
 	private void SetFrame(Sprite sprite)
+	//#private void SetFrame(List<Sprite> sprite)
 	{
 		if (sr)
 		{
